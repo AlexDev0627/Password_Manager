@@ -1,8 +1,8 @@
 {
-  "name": "expo-template-default",
-  "license": "0BSD",
+  "name": "PasswordManager",
+  "license": "Apache-2.0",
   "main": "expo-router/entry",
-  "version": "55.1.23",
+  "version": "1.0.0",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
