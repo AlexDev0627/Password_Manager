@@ -5,8 +5,8 @@ export default function Pass (){
     const [site, setSite] = useState("");
     const [username, setUsername] = useState ("");
     const [password, setPassword] = useState("");
-    const [length, setLength] = useState();
-    const [generatePass, setGeneratePass] = useState("");
+    // const [length, setLength] = useState();
+    // const [generatePass, setGeneratePass] = useState("");
 
     const passwordGenerate = (limit: string) => {
         const numLimit = parseInt(limit);
@@ -60,16 +60,16 @@ export default function Pass (){
                 value={password}
                 onChangeText={setPassword}
             />
-            <TextInput
+            {/* <TextInput
             style = {styles.input}
             placeholder="Length of password to generate"
             keyboardType="numeric"
             value={length}
             onChangeText={setLength}>
-            </TextInput>
+            </TextInput> */}
 
-                <Text style = {styles.button} onPress={() => passwordGenerate(length)}>Generate password</Text>
-                <Text style={{ backgroundColor: '#a2a2a2a1', marginTop: 10, padding: 10, borderRadius:10 }}>{generatePass}</Text>
+                {/* <Text style = {styles.button} onPress={() => passwordGenerate(length)}>Generate password</Text> */}
+                {/* <Text style={{ backgroundColor: '#a2a2a2a1', marginTop: 10, padding: 10, borderRadius:10 }}>{generatePass}</Text> */}
                 <Text style={styles.button} onPress={handleSavePassword}>Guardar</Text>
         </View>
     );
