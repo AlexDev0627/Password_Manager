@@ -12,12 +12,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
         }}
       />
-     
+
       <Tabs.Screen
-        name="notes"
+        name="list"
         options={{
           headerShown: false,
-          title: 'Notas',
+          title: 'Lista',
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="sticky-note" color={color} />,
         }}
       />
@@ -29,7 +29,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="lock" color={color} />,
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="settings"
         options={{
           headerShown: false,
