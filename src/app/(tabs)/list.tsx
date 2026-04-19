@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Platform } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { getPasswords, deletePassword, PasswordEntry } from "@/utils/storage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -18,7 +18,16 @@ export default function List() {
         }, [loadPasswords])
     );
 
-    const handleDelete = (id: string) => {
+    const handleDelete = async (id: string) => {
+        if (Platform.OS === "web") {
+            const confirmed = confirm("Estas seguro que quieres eliminar la clave?");
+            if (confirmed) {
+                await deletePassword(id);
+                loadPasswords();
+            }
+            return;
+        }
+
         Alert.alert(
             "Eliminar",
             "¿Estás seguro de que quieres eliminar esta contraseña?",
@@ -69,6 +78,7 @@ export default function List() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignContent: "center",
         backgroundColor: '#f5f5f5',
         paddingTop: 50,
     },
@@ -80,8 +90,10 @@ const styles = StyleSheet.create({
     },
     listContent: {
         paddingHorizontal: 20,
+        alignItems: "center"
     },
     card: {
+        alignContent: "center",
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
@@ -94,6 +106,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
+        width: 300,
+        height: 120,
     },
     cardInfo: {
         flex: 1,
