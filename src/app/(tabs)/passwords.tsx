@@ -19,6 +19,7 @@ export default function Pass() {
                 site,
                 username,
                 password,
+                createdAt: Date.now()
             });
 
             alert("Contraseña guardada correctamente.");

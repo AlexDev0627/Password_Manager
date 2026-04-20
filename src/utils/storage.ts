@@ -8,20 +8,21 @@ export interface PasswordEntry {
   site: string;
   username: string;
   password?: string;
+  createdAt?: number;
 }
 
 
-// Guarda una nueva contraseña en la lista persistente
+// Guarda una nueva password en la lista persistente
 // Usa SecureStore en nativo y localStorage en Web
 
 export async function savePassword(newEntry: PasswordEntry): Promise<void> {
   try {
     const existingPasswords = await getPasswords();
-    const updatedPasswords = [...existingPasswords, newEntry];
+    const updatedPasswords = [newEntry, ...existingPasswords];
     const stringValue = JSON.stringify(updatedPasswords);
 
     if (Platform.OS === 'web') {
-      //  console.log(Platform.OS)
+
       localStorage.setItem(PASSWORDS_KEY, stringValue);
     } else {
       await SecureStore.setItemAsync(PASSWORDS_KEY, stringValue);
@@ -51,7 +52,7 @@ export async function getPasswords(): Promise<PasswordEntry[]> {
   }
 }
 
-// Funcion para rliminar una contraseña por su ID
+// Funcion para rliminar una password por su ID
 
 export async function deletePassword(id: string): Promise<void> {
   try {

@@ -1,12 +1,13 @@
 import { useState, useCallback } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Platform } from "react-native";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { getPasswords, deletePassword, PasswordEntry } from "@/utils/storage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function List() {
     const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
 
+    const router = useRouter()
     const loadPasswords = useCallback(async () => {
         const stored = await getPasswords();
         setPasswords(stored);
@@ -47,10 +48,12 @@ export default function List() {
 
     const renderItem = ({ item }: { item: PasswordEntry }) => (
         <View style={styles.card}>
-            <View style={styles.cardInfo}>
+            <TouchableOpacity style={
+                styles.cardInfo
+            } onPress={() => router.push(`/details/${item.id}`)}>
                 <Text style={styles.siteText}>{item.site}</Text>
                 <Text style={styles.userText}>{item.username}</Text>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => handleDelete(item.id)}>
                 <FontAwesome name="trash" size={24} color="#ff4444" />
             </TouchableOpacity>
