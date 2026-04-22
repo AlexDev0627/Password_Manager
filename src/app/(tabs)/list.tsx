@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Platform } f
 import { useFocusEffect, useRouter } from "expo-router";
 import { getPasswords, deletePassword, PasswordEntry } from "@/utils/storage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useTheme } from "@/context/ThemeContext";
 
 export default function List() {
+    const {theme} = useTheme();
+    const styles = theme === "dark" ? darkStyles : lightStyles;
     const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
 
     const router = useRouter()
@@ -78,7 +81,7 @@ export default function List() {
     );
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     container: {
         flex: 1,
         alignContent: "center",
@@ -129,5 +132,60 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 50,
         color: '#999',
+    }
+});
+
+const darkStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignContent: "center",
+        paddingTop: 50,
+        backgroundColor: '#181a20',
+    },
+    header: {
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    listContent: {
+        paddingHorizontal: 20,
+        alignItems: "center"
+    },
+    card: {
+        alignContent: "center",
+        backgroundColor: '#23242a', // Fondo más oscuro para la tarjeta
+        padding: 20,
+        borderRadius: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 4,
+        width: 300,
+        height: 120,
+    },
+    cardInfo: {
+        flex: 1,
+    },
+    siteText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff', // Texto claro
+    },
+    userText: {
+        fontSize: 14,
+        color: '#bbb', // Gris claro para el usuario
+        marginTop: 4,
+    },
+    emptyText: {
+        textAlign: 'center',
+        marginTop: 50,
+        color: '#888', // Gris medio para mensajes vacíos
     }
 });

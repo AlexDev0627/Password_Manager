@@ -1,14 +1,17 @@
+import { ThemeProvider } from "@/context/ThemeContext";
 import { Stack } from "expo-router";
 
 export default function Layout() {
   return (
-    <Stack>
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
+    <ThemeProvider>
+      <Stack>
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
         }}
-      />
+        />
     </Stack>
+  </ThemeProvider>
   );
 }

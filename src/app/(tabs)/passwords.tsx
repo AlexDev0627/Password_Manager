@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { savePassword } from "@/utils/storage";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Pass() {
+    const { theme } = useTheme();
+    const styles = theme === "dark" ? darkStyles : lightStyles;
     const [site, setSite] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -24,7 +27,6 @@ export default function Pass() {
 
             alert("Contraseña guardada correctamente.");
 
-            // Limpiamos los campos
             setSite("");
             setUsername("");
             setPassword("");
@@ -33,72 +35,112 @@ export default function Pass() {
         }
     }
 
-
     return (
-        <View style={styles.view}>
-            <Text style={styles.text}>Password Tab</Text>
-            <TextInput style={styles.input}
-                placeholder="Enter the site"
+        <View style={styles.container}>
+            <Text style={styles.title}>Crear Contraseña</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Sitio web o app"
+                placeholderTextColor={theme === "dark" ? "#888" : "#666"}
                 value={site}
-                onChangeText={setSite}>
-            </TextInput>
-
+                onChangeText={setSite}
+            />
             <TextInput
                 style={styles.input}
-                placeholder="Username or Email"
+                placeholder="Usuario o correo"
+                placeholderTextColor={theme === "dark" ? "#888" : "#666"}
                 value={username}
-                onChangeText={setUsername}>
-            </TextInput>
-
+                onChangeText={setUsername}
+            />
             <TextInput
                 style={styles.input}
-                placeholder="Enter your password"
+                placeholder="Contraseña"
+                placeholderTextColor={theme === "dark" ? "#888" : "#666"}
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
             />
-            {/* <TextInput
-            style = {styles.input}
-            placeholder="Length of password to generate"
-            keyboardType="numeric"
-            value={length}
-            onChangeText={setLength}>
-            </TextInput> */}
-
-            {/* <Text style = {styles.button} onPress={() => passwordGenerate(length)}>Generate password</Text> */}
-            {/* <Text style={{ backgroundColor: '#a2a2a2a1', marginTop: 10, padding: 10, borderRadius:10 }}>{generatePass}</Text> */}
-            <Text style={styles.button} onPress={handleSavePassword}>Guardar</Text>
+            <TouchableOpacity style={styles.button} onPress={handleSavePassword}>
+                <Text style={styles.buttonText}>Guardar</Text>
+            </TouchableOpacity>
         </View>
     );
-
 }
 
-const styles = StyleSheet.create({
-    view: {
+const lightStyles = StyleSheet.create({
+    container: {
         flex: 1,
-        alignItems: "center",
+        backgroundColor: "#f5f5f5",
         justifyContent: "center",
+        padding: 24,
     },
-    text: {
+    title: {
+        color: "#222",
+        fontSize: 24,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: 24,
     },
     input: {
-        borderRadius: 5,
-        height: 30,
-        paddingHorizontal: 10,
-        borderColor: "#ccc",
+        backgroundColor: "#fff",
+        color: "#222",
+        borderRadius: 8,
+        padding: 14,
+        marginBottom: 18,
         borderWidth: 1,
-        marginTop: 20,
-        color: "rgba(6, 6, 6, 0.84)",
-        backgroundColor: "rgba(213, 213, 213, 0.8)",
+        borderColor: "#2e499aff",
+        fontSize: 16,
     },
     button: {
+        backgroundColor: "#2e499aff",
+        padding: 14,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 10,
+    },
+    buttonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 16,
+        letterSpacing: 1,
+    },
+});
+
+const darkStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#181a20",
+        justifyContent: "center",
+        padding: 24,
+    },
+    title: {
+        color: "#fff",
+        fontSize: 24,
+        fontWeight: "bold",
         textAlign: "center",
-        alignContent: "center",
-        backgroundColor: "rgba(14, 94, 199, 0.97)",
-        height: 40,
-        width: 100,
-        borderRadius: 5,
-        color: "rgba(255, 255, 255, 0.93)",
-        marginTop: 20,
-    }
+        marginBottom: 24,
+    },
+    input: {
+        backgroundColor: "#23242a",
+        color: "#fff",
+        borderRadius: 8,
+        padding: 14,
+        marginBottom: 18,
+        borderWidth: 1,
+        borderColor: "#333",
+        fontSize: 16,
+    },
+    button: {
+        backgroundColor: "#2e499aff",
+        padding: 14,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 10,
+    },
+    buttonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 16,
+        letterSpacing: 1,
+    },
 });

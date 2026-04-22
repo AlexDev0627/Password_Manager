@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { getPasswords, PasswordEntry } from "@/utils/storage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as Clipboard from 'expo-clipboard';
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Details() {
+    const { theme } = useTheme();
+    const styles = theme === "dark" ? darkStyles : lightStyles;
+
     const { id } = useLocalSearchParams(); // Obtenemos el ID de la card que tocamos
     const router = useRouter();
     const [password, setPassword] = useState<PasswordEntry | null>(null);
@@ -39,7 +43,8 @@ export default function Details() {
 
     return (
 
-        <ScrollView style={styles.container}>
+        <ScrollView 
+        style={styles.container}>
             {/* Boton para regresar a la pantalla anterior */}
             <TouchableOpacity onPress={() => router.push(`/list`)} style={styles.backButton}>
                 <FontAwesome name="arrow-left" size={20} color="#333" />
@@ -123,7 +128,7 @@ export default function Details() {
     );
 }
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#f8f9fa",
@@ -233,4 +238,115 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
     },
 
+});
+
+const darkStyles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#181a20", 
+        padding: 20,
+    },
+    backButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 40,
+        marginBottom: 30,
+    },
+    backText: {
+        fontSize: 16,
+        color: "#fff", 
+        fontWeight: "500",
+    },
+    header: {
+        alignItems: "center",
+        marginBottom: 30,
+    },
+    iconCircle: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: "#007AFF", 
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: 15,
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: "bold",
+        color: "#fff",
+    },
+    card: {
+        backgroundColor: "#23242a", // Tarjeta más oscura
+        borderRadius: 15,
+        padding: 20,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 5,
+        width: 400,
+        alignSelf: "center"
+    },
+    section: {
+        marginVertical: 10,
+    },
+    sectionDivider: {
+        height: 1,
+        backgroundColor: "#333", // Divider más oscuro
+        marginVertical: 10,
+    },
+    label: {
+        fontSize: 13,
+        color: "#bbb", // Etiquetas gris claro
+        textTransform: "uppercase",
+        letterSpacing: 1,
+        marginBottom: 8,
+    },
+    infoRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 12,
+    },
+    passwordRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    value: {
+        fontSize: 18,
+        color: "#fff", // Valores claros
+        fontWeight: "600",
+    },
+    passwordText: {
+        fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+        color: "#fff",
+    },
+    eyeButton: {
+        padding: 10,
+    },
+    footerNote: {
+        textAlign: "center",
+        color: "#888", // Nota en gris
+        marginTop: 40,
+        fontSize: 12,
+        fontStyle: "italic",
+    },
+    emptyText: {
+        textAlign: "center",
+        marginTop: 100,
+        fontSize: 16,
+        color: "#888",
+    },
+    metadataSection: {
+        marginTop: 20,
+        paddingTop: 15,
+        borderTopWidth: 1,
+        borderTopColor: '#333',
+        alignItems: 'center',
+    },
+    metadataText: {
+        fontSize: 12,
+        color: '#bbb',
+        fontStyle: 'italic',
+    },
 });
