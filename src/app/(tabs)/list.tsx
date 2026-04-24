@@ -48,7 +48,7 @@ export default function List() {
             ]
         );
     };
-
+    // Funciona para renderizar cada item de la lista, en este caso las passwords
     const renderItem = ({ item }: { item: PasswordEntry }) => (
         <View style={styles.card}>
             <TouchableOpacity style={
@@ -62,7 +62,8 @@ export default function List() {
             </TouchableOpacity>
         </View>
     );
-
+    
+// Si no hay passwords guardaddas devolvemos el siguiente mensaje
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Mis Contraseñas</Text>
