@@ -16,7 +16,7 @@ export default function TabLayout() {
           backgroundColor: isDark ? '#181a20' : '#f0f0f0',
           borderTopColor: isDark ? '#333' : '#ccc',
         },
-        headerShown: false, // Oculta el header en todas las pantallas por defecto
+        headerShown: false, // oculta el header en todas las pantallas por defecto
       }}
     >
       <Tabs.Screen
