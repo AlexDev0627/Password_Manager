@@ -33,7 +33,7 @@ export default function Pass() {
         } catch (error) {
             alert("Error al guardar la contraseña.");
         }
-    }
+    };
 
     return (
         <View style={styles.container}>
@@ -72,6 +72,7 @@ const lightStyles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#f5f5f5",
         justifyContent: "center",
+        alignItems: "center",
         padding: 24,
     },
     title: {
@@ -90,6 +91,7 @@ const lightStyles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#2e499aff",
         fontSize: 16,
+        width: 300,
     },
     button: {
         backgroundColor: "#2e499aff",
@@ -97,6 +99,7 @@ const lightStyles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         marginTop: 10,
+        width: 100,
     },
     buttonText: {
         color: "#fff",
@@ -111,6 +114,7 @@ const darkStyles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#181a20",
         justifyContent: "center",
+        alignItems: "center",
         padding: 24,
     },
     title: {
@@ -129,6 +133,7 @@ const darkStyles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#333",
         fontSize: 16,
+        width: 300,
     },
     button: {
         backgroundColor: "#2e499aff",
@@ -136,6 +141,8 @@ const darkStyles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         marginTop: 10,
+        width: 100,
+       
     },
     buttonText: {
         color: "#fff",

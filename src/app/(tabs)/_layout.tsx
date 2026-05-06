@@ -22,24 +22,24 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Inicio',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="lock" color={color} />,
         }}
       />
 
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="list"
         options={{
           title: 'Lista',
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="sticky-note" color={color} />,
         }}
-      />
+      /> */}
 
       <Tabs.Screen
         name="passwords"
         options={{
-          title: 'Contraseñas',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="lock" color={color} />,
+          title: 'Crear',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="plus" color={color} />,
         }}
       />
 

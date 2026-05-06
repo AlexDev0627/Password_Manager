@@ -5,6 +5,8 @@ import { getPasswords, PasswordEntry } from "@/utils/storage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as Clipboard from 'expo-clipboard';
 import { useTheme } from "@/context/ThemeContext";
+import { Avatar } from "react-native-paper";
+
 
 export default function Details() {
     const { theme } = useTheme();
@@ -39,22 +41,31 @@ export default function Details() {
             </View>
         );
     }
-    { console.log("El valor de createdAt es:", password.createdAt) }
+    { console.log("El valor de createdAt es:", password.createdAt) };
+
+    const getFavIcon = (domain:string)=>{
+        const cleanedDomain = domain.trim().toLowerCase();
+        return `https://www.google.com/s2/favicons?sz=128&domain=${cleanedDomain}.com`;
+    };
 
     return (
 
         <ScrollView 
         style={styles.container}>
             {/* Boton para regresar a la pantalla anterior */}
-            <TouchableOpacity onPress={() => router.push(`/list`)} style={styles.backButton}>
+            <TouchableOpacity onPress={() => router.push(`/`)} style={styles.backButton}>
                 <FontAwesome name="arrow-left" size={20} color="#333" />
-                <Text style={styles.backText}> Volver a la lista</Text>
+                <Text style={styles.backText}> Volver a Inicio</Text>
             </TouchableOpacity>
 
             <View style={styles.header}>
-                <View style={styles.iconCircle}>
+                {/* <View style={styles.iconCircle}>
                     <FontAwesome name="lock" size={40} color="white" />
-                </View>
+                </View> */}
+                 <Avatar.Image 
+                              size={55}
+                              source={{uri: getFavIcon(password.site)}}
+                              style={{backgroundColor:"transparent"}}/>
                 <Text style={styles.title}>{password.site}</Text>
             </View>
 
@@ -72,7 +83,10 @@ export default function Details() {
                     <Text style={styles.label}>Nombre de Usuario / Correo</Text>
                     <View style={styles.infoRow}>
                         <FontAwesome name="user" size={18} color="#666" />
+                        {/* funcion para copiar usuario al portapapeles */}
+                        <TouchableOpacity onPress={()=> copyToClipboard(password.username || "", "Usuario")}>
                         <Text style={styles.value}>{password.username}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -84,8 +98,10 @@ export default function Details() {
                     <View style={styles.passwordRow}>
                         <View style={styles.infoRow}>
                             <FontAwesome name="key" size={18} color="#666" />
+                            {/* funcion para copiar password al portapapeles */}
                             <TouchableOpacity onPress={() => copyToClipboard(password.password || "", "Contraseña")}>
                                 <Text style={[styles.value, styles.passwordText]}>
+                                    {/* estilos para mostrar o no la password */}
                                     {showPassword ? password.password : "*************"}
                                 </Text>
                             </TouchableOpacity>
@@ -163,6 +179,7 @@ const lightStyles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold",
         color: "#222",
+        paddingTop:10,
     },
     card: {
         backgroundColor: "white",
@@ -274,6 +291,7 @@ const darkStyles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold",
         color: "#fff",
+        paddingTop:10,
     },
     card: {
         backgroundColor: "#23242a", // Tarjeta más oscura
