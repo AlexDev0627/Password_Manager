@@ -10,14 +10,14 @@ export default function Layout() {
         <SafeAreaView style={{ flex: 1 }}>
           <Stack>
             <Stack.Screen
-            name="(tabs)"
-            options={{
-              headerShown: false,
-          }}
-          />
-        </Stack>
-      </SafeAreaView>
-    </ThemeProvider>
-  </GestureHandlerRootView>
+              name="(tabs)"
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+        </SafeAreaView>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

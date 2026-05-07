@@ -43,15 +43,16 @@ export default function Details() {
     }
     { console.log("El valor de createdAt es:", password.createdAt) };
 
-    const getFavIcon = (domain:string)=>{
+    const getFavIcon = (domain: string) => {
         const cleanedDomain = domain.trim().toLowerCase();
         return `https://www.google.com/s2/favicons?sz=128&domain=${cleanedDomain}.com`;
     };
 
     return (
 
-        <ScrollView 
-        style={styles.container}>
+        <ScrollView
+            style={styles.container}
+        >
             {/* Boton para regresar a la pantalla anterior */}
             <TouchableOpacity onPress={() => router.push(`/`)} style={styles.backButton}>
                 <FontAwesome name="arrow-left" size={20} color="#333" />
@@ -62,10 +63,10 @@ export default function Details() {
                 {/* <View style={styles.iconCircle}>
                     <FontAwesome name="lock" size={40} color="white" />
                 </View> */}
-                 <Avatar.Image 
-                              size={55}
-                              source={{uri: getFavIcon(password.site)}}
-                              style={{backgroundColor:"transparent"}}/>
+                <Avatar.Image
+                    size={55}
+                    source={{ uri: getFavIcon(password.site) }}
+                    style={{ backgroundColor: "transparent" }} />
                 <Text style={styles.title}>{password.site}</Text>
             </View>
 
@@ -84,8 +85,8 @@ export default function Details() {
                     <View style={styles.infoRow}>
                         <FontAwesome name="user" size={18} color="#666" />
                         {/* funcion para copiar usuario al portapapeles */}
-                        <TouchableOpacity onPress={()=> copyToClipboard(password.username || "", "Usuario")}>
-                        <Text style={styles.value}>{password.username}</Text>
+                        <TouchableOpacity onPress={() => copyToClipboard(password.username || "", "Usuario")}>
+                            <Text style={styles.value}>{password.username}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -179,7 +180,7 @@ const lightStyles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold",
         color: "#222",
-        paddingTop:10,
+        paddingTop: 10,
     },
     card: {
         backgroundColor: "white",
@@ -260,7 +261,7 @@ const lightStyles = StyleSheet.create({
 const darkStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#181a20", 
+        backgroundColor: "#181a20",
         padding: 20,
     },
     backButton: {
@@ -271,7 +272,7 @@ const darkStyles = StyleSheet.create({
     },
     backText: {
         fontSize: 16,
-        color: "#fff", 
+        color: "#fff",
         fontWeight: "500",
     },
     header: {
@@ -282,7 +283,7 @@ const darkStyles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: "#007AFF", 
+        backgroundColor: "#007AFF",
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 15,
@@ -291,7 +292,7 @@ const darkStyles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold",
         color: "#fff",
-        paddingTop:10,
+        paddingTop: 10,
     },
     card: {
         backgroundColor: "#23242a", // Tarjeta más oscura

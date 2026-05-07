@@ -1,15 +1,25 @@
-import  AvatarText  from "@/components/avatarText";
+import AvatarText from "@/components/avatarText";
 import { useState, useCallback } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Platform } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Platform, Button } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { getPasswords, deletePassword, PasswordEntry } from "@/utils/storage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useTheme } from "@/context/ThemeContext";
-import { Avatar } from "react-native-paper";
+import { Avatar, } from "react-native-paper";
+import React, { useMemo, useRef } from 'react';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
 
 export default function Index() {
-    const {theme} = useTheme();
+    //funcion para abrir un modalBottomSheet
+    const bottomSheetRef = useRef<BottomSheet>(null);
+    //con useMemo definicmos los puntos de altura
+    const snapPoints = useMemo(() => ['25%', '50%'], []);
+    const openSheet = () => {
+        bottomSheetRef.current?.expand();
+    }
+    //Funcion para definir tema
+    const { theme } = useTheme();
     const styles = theme === "dark" ? darkStyles : lightStyles;
     const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
 
@@ -51,43 +61,57 @@ export default function Index() {
             ]
         );
     };
-        // funcion para limpiar y buscar la imagen de un dominio
-        const getFavIcon = (domain: string)=>{
-            // formateamos el dominio
-            const cleadDomain = domain.trim().toLocaleLowerCase();
-            
-            return `https://www.google.com/s2/favicons?sz=128&domain=${cleadDomain}.com`;
-        };
+    // funcion para limpiar y buscar la imagen de un dominio
+    const getFavIcon = (domain: string) => {
+        // formateamos el dominio
+        const cleadDomain = domain.trim().toLocaleLowerCase();
 
-     // Funciona para renderizar cada item de la lista, en este caso las passwords
-        const renderItem = ({ item }: { item: PasswordEntry }) => (
-            <View style={styles.card}>
-              <Avatar.Image 
-              size={35}
-              source={{uri: getFavIcon(item.site)}}
-              style={{backgroundColor:"transparent"}}/>
-                <TouchableOpacity style={
-                    styles.cardInfo
-                } onPress={() => router.push(`/details/${item.id}`)}>
-                    <Text style={styles.siteText}>{item.site}</Text>
-                    <Text style={styles.userText}>{item.username}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                    <FontAwesome name="trash" size={24} color="#ff4444" />
-                </TouchableOpacity>
-            </View>
-        );
+        return `https://www.google.com/s2/favicons?sz=128&domain=${cleadDomain}.com`;
+    };
 
-    
-// Si no hay passwords guardaddas devolvemos el siguiente mensaje
+    // Funciona para renderizar cada item de la lista, en este caso las passwords
+    const renderItem = ({ item }: { item: PasswordEntry }) => (
+        <View style={styles.card}>
+            <Avatar.Image
+                size={35}
+                source={{ uri: getFavIcon(item.site) }}
+                style={{ backgroundColor: "transparent" }} />
+            <TouchableOpacity style={
+                styles.cardInfo
+            } onPress={() => router.push(`/details/${item.id}`)}>
+                <Text style={styles.siteText}>{item.site}</Text>
+                <Text style={styles.userText}>{item.username}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                <FontAwesome name="trash" size={24} color="#ff4444" />
+            </TouchableOpacity>
+        </View>
+    );
+
+
+    // Si no hay passwords guardaddas devolvemos el siguiente mensaje
     return (
-      
+
         <View style={styles.container}>
             <Text style={styles.header}>Gestor de contraseñas</Text>
+            {/* modalBottomSheet */}
+            <Button title="Configuraciones" onPress={openSheet} />
+            <BottomSheet
+                ref={bottomSheetRef}
+                index={-1} // -1 significa que inicia OCULTO
+                snapPoints={snapPoints}
+                enablePanDownToClose={true} // Permite cerrar al deslizar abajo
+            >
+                <BottomSheetView style={{ padding: 20 }}>
+                    <Text>Este es el contenido del modal 🚀</Text>
+                </BottomSheetView>
+            </BottomSheet>
 
+            {/* ////////////////////////// */}
             {passwords.length === 0 ? (
                 <Text style={styles.emptyText}>No tienes contraseñas guardadas aún.</Text>
             ) : (
+
                 <FlatList
                     data={passwords}
                     keyExtractor={(item) => item.id}
@@ -117,10 +141,11 @@ const lightStyles = StyleSheet.create({
         alignItems: "center"
     },
     card: {
+        flex: 1,
         alignContent: "center",
         backgroundColor: 'white',
         paddingVertical: 12,
-        paddingHorizontal:16,
+        paddingHorizontal: 16,
         borderRadius: 16,
         flexDirection: 'row',
         alignItems: 'center',
@@ -136,7 +161,7 @@ const lightStyles = StyleSheet.create({
     },
     cardInfo: {
         flex: 1,
-        paddingHorizontal:10,
+        paddingHorizontal: 10,
     },
     siteText: {
         fontSize: 18,
@@ -178,7 +203,7 @@ const darkStyles = StyleSheet.create({
         alignContent: "center",
         backgroundColor: '#23242a', // Fondo más oscuro para la tarjeta
         paddingVertical: 12,
-        paddingHorizontal:16,
+        paddingHorizontal: 16,
         borderRadius: 16,
         flexDirection: 'row',
         alignItems: 'center',
@@ -194,7 +219,7 @@ const darkStyles = StyleSheet.create({
     },
     cardInfo: {
         flex: 1,
-        paddingHorizontal:10
+        paddingHorizontal: 10
     },
     siteText: {
         fontSize: 18,
