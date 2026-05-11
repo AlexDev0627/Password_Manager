@@ -20,23 +20,23 @@ export default function Index() {
     //con useMemo definicmos los puntos de altura
     const snapPoints = useMemo(() => ['25%', '50%'], []);
     // funcion para abrir el modal
-    const openSheet = () => {bottomSheetRef.current?.expand();}
+    const openSheet = () => { bottomSheetRef.current?.expand(); }
     // funcion para cerrar el modal
-    const closeSheet = ()=> {bottomSheetRef.current?.close()}
+    const closeSheet = () => { bottomSheetRef.current?.close() }
     // funcion para renderizar el fondo del modal
-    const renderBackdrop = useCallback((props: any)=>(
+    const renderBackdrop = useCallback((props: any) => (
         <BottomSheetBackdrop {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-        opacity={0.5}
-        pressBehavior="close"
+            disappearsOnIndex={-1}
+            appearsOnIndex={0}
+            opacity={0.5}
+            pressBehavior="close"
         />
     ),
-    []
-);
-    
-    
-    
+        []
+    );
+
+
+
     //Funcion para definir tema
     const { theme } = useTheme();
     const styles = theme === "dark" ? darkStyles : lightStyles;
@@ -101,7 +101,7 @@ export default function Index() {
                 <Text style={styles.siteText}>{item.site}</Text>
                 <Text style={styles.userText}>{item.username}</Text>
             </TouchableOpacity>
-             <TouchableOpacity onPress={() => handleDelete(item.id)}>
+            <TouchableOpacity onPress={() => handleDelete(item.id)}>
                 <FontAwesome5 name="ellipsis-v" size={15} color="#898888ff" onPress={openSheet} />
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={() => handleDelete(item.id)}>
@@ -114,63 +114,63 @@ export default function Index() {
     // Si no hay passwords guardaddas devolvemos el siguiente mensaje
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={styles.container}>
-            <Text style={styles.header}>Gestor de contraseñas</Text>
+            <View style={styles.container}>
+                <Text style={styles.header}>Gestor de contraseñas</Text>
 
-            {/* ////////////////////////// */}
-            {passwords.length === 0 ? (
-                <Text style={styles.emptyText}>No tienes contraseñas guardadas aún.</Text>
-            ) : (
+                {/* ////////////////////////// */}
+                {passwords.length === 0 ? (
+                    <Text style={styles.emptyText}>No tienes contraseñas guardadas aún.</Text>
+                ) : (
 
-                <FlatList
-                    data={passwords}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderItem}
-                    contentContainerStyle={styles.listContent}
-                />
-            )}
+                    <FlatList
+                        data={passwords}
+                        keyExtractor={(item) => item.id}
+                        renderItem={renderItem}
+                        contentContainerStyle={styles.listContent}
+                    />
+                )}
 
-             {/* modalBottomSheet */}
-            {/* <Button title="Configuraciones" onPress={openSheet} /> */}
-            <BottomSheet
-                ref={bottomSheetRef}
-                index={-1} // -1 significa que inicia OCULTO
-                snapPoints={snapPoints}
-                enablePanDownToClose={true} // Permite cerrar al deslizar abajo
-                backdropComponent={renderBackdrop} // Fondo personalizado
-                backgroundStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: theme === "dark" ? '#181a20' : '#f5f5f5' }}
-            >
-                <BottomSheetView style={styles.modalContent}>
-                    <Text style={styles.userText}>Contenido del modal</Text>
-                    <GHTouchableOpacity  onPress={closeSheet} style={styles.modalTouch}>
-                        <Text style={styles.bottomSheetText}>
-                            <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15, }} />
-                            Copiar Email
-                        </Text>
-                    </GHTouchableOpacity>
-                    <GHTouchableOpacity  onPress={closeSheet} style={styles.modalTouch}>
-                        <Text style={styles.bottomSheetText}>
-                            <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15 }} />
-                            Copiar Password
-                        </Text>
-                    </GHTouchableOpacity>
+                {/* modalBottomSheet */}
+                {/* <Button title="Configuraciones" onPress={openSheet} /> */}
+                <BottomSheet
+                    ref={bottomSheetRef}
+                    index={-1} // -1 significa que inicia OCULTO
+                    snapPoints={snapPoints}
+                    enablePanDownToClose={true} // Permite cerrar al deslizar abajo
+                    backdropComponent={renderBackdrop} // Fondo personalizado
+                    backgroundStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: theme === "dark" ? '#181a20' : '#f5f5f5' }}
+                >
+                    <BottomSheetView style={styles.modalContent}>
+                        <Text style={styles.userText}>Contenido del modal</Text>
+                        <GHTouchableOpacity onPress={closeSheet} style={styles.modalTouch}>
+                            <Text style={styles.bottomSheetText}>
+                                <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15, }} />
+                                Copiar Email
+                            </Text>
+                        </GHTouchableOpacity>
+                        <GHTouchableOpacity onPress={closeSheet} style={styles.modalTouch}>
+                            <Text style={styles.bottomSheetText}>
+                                <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15 }} />
+                                Copiar Password
+                            </Text>
+                        </GHTouchableOpacity>
 
-                     <GHTouchableOpacity  onPress={handleDelete} style={styles.modalTouch}>
-                        <Text style={styles.bottomSheetText}>
-                            <FontAwesome5 name="trash" size={20} color="#777" style={{ marginRight: 15 }} />
-                            Eliminar contraseña
-                        </Text>
-                    </GHTouchableOpacity>
+                        <GHTouchableOpacity onPress={handleDelete} style={styles.modalTouch}>
+                            <Text style={styles.bottomSheetText}>
+                                <FontAwesome5 name="trash" size={20} color="#777" style={{ marginRight: 15 }} />
+                                Eliminar contraseña
+                            </Text>
+                        </GHTouchableOpacity>
 
-                    <GHTouchableOpacity  onPress={closeSheet} style={styles.modalTouch}>
-                        <Text style={{ color: 'white' }}>
-                             <FontAwesome5 name="times" size={20} color="#777" style={{ marginRight: 15 }} />
+                        <GHTouchableOpacity onPress={closeSheet} style={styles.modalTouch}>
+                            <Text style={styles.bottomSheetText}>
+                                <FontAwesome5 name="times" size={20} color="#777" style={{ marginRight: 15 }} />
                                 Cerrar Modal
                             </Text>
-                    </GHTouchableOpacity>
-                </BottomSheetView>
-            </BottomSheet>
-        </View>
+                        </GHTouchableOpacity>
+                    </BottomSheetView>
+                </BottomSheet>
+            </View>
         </GestureHandlerRootView>
     );
 }
@@ -236,15 +236,20 @@ const lightStyles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#f5f5f5',
     },
-    modalTouch:{
-        width:'80%',
+    modalTouch: {
+        width: '450px',
         marginTop: 20,
-         padding: 10,
-         backgroundColor: '#007bff',
-         borderRadius: 5,
-        borderBlockColor:"#bd41dcff",
+        padding: 10,
+        alignSelf: "center",
+        alignContent: "center",
+        backgroundColor: 'transparent',
+        border: "2px solid #4435c993",
+        borderRadius: 10
     },
-    
+    bottomSheetText: {
+        color: "black"
+    }
+
 });
 
 const darkStyles = StyleSheet.create({
@@ -303,24 +308,24 @@ const darkStyles = StyleSheet.create({
         marginTop: 50,
         color: '#888', // Gris medio para mensajes vacíos
     },
-    modalContent:{
+    modalContent: {
         alignItems: 'center',
-        justifyContent: 'center', 
-        display:"flex",
-        width:"100%",
-       
+        justifyContent: 'center',
+        display: "flex",
+        width: "100%",
+
     },
-    modalTouch:{
-         width:'450px',
-         marginTop: 20,
-         padding: 10,
-         alignSelf: "center",
-         alignContent: "center",
-         backgroundColor: 'transparent',
-         border: "2px solid #3a346d93",
-         borderRadius: 10
+    modalTouch: {
+        width: '450px',
+        marginTop: 20,
+        padding: 10,
+        alignSelf: "center",
+        alignContent: "center",
+        backgroundColor: 'transparent',
+        border: "2px solid #3a346d93",
+        borderRadius: 10
     },
-    bottomSheetText:{
+    bottomSheetText: {
         color: 'white',
     }
 });
