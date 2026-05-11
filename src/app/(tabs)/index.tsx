@@ -157,11 +157,14 @@ export default function Index() {
                 >
                     <BottomSheetView style={styles.modalContent}>
                         {/* <Text style={styles.userText}>Contenido del modal</Text> */}
-                        <Avatar.Image
-                            size={45}
-                            source={{ uri: getFavIcon(selectedItem.site) }}
-                            style={{ backgroundColor: "transparent" }}
-                        />
+                        {/* //Validamos selectedItem */}
+                        {selectedItem && (
+                            <Avatar.Image
+                                size={45}
+                                source={{ uri: getFavIcon(selectedItem.site) }}
+                                style={{ backgroundColor: "transparent" }}
+                            />
+                        )}
                         <Text style={styles.siteModalText}>
                             Sitio: {selectedItem?.site}
                         </Text>
