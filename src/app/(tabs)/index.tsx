@@ -12,6 +12,8 @@ import React, { useMemo, useRef } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import * as Clipboard from 'expo-clipboard';
+
 
 
 export default function Index() {
@@ -35,12 +37,12 @@ export default function Index() {
         []
     );
 
-
-
     //Funcion para definir tema
     const { theme } = useTheme();
     const styles = theme === "dark" ? darkStyles : lightStyles;
     const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
+    //estado para saber que elemento se selecciono del modal
+    const [selectedItem, setSelectedItem] = useState<PasswordEntry | null>(null);
 
     const router = useRouter()
     const loadPasswords = useCallback(async () => {
@@ -56,7 +58,7 @@ export default function Index() {
 
     const handleDelete = async (id: string) => {
         if (Platform.OS === "web") {
-            const confirmed = confirm("Estas seguro que quieres eliminar la clave?");
+            const confirmed = confirm("¿Estás seguro de que quieres eliminar esta contraseña?");
             if (confirmed) {
                 await deletePassword(id);
                 loadPasswords();
@@ -87,6 +89,11 @@ export default function Index() {
 
         return `https://www.google.com/s2/favicons?sz=128&domain=${cleadDomain}.com`;
     };
+    // Funcion para copiar en el clipboard
+    const copyToClipboard = async (text: string, label: string) => {
+        await Clipboard.setStringAsync(text);
+        alert(`${label} copiado al portapapeles`)
+    }
 
     // Funciona para renderizar cada item de la lista, en este caso las passwords
     const renderItem = ({ item }: { item: PasswordEntry }) => (
@@ -101,8 +108,12 @@ export default function Index() {
                 <Text style={styles.siteText}>{item.site}</Text>
                 <Text style={styles.userText}>{item.username}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                <FontAwesome5 name="ellipsis-v" size={15} color="#898888ff" onPress={openSheet} />
+            <TouchableOpacity onPress={() => {
+                setSelectedItem(item);
+
+                openSheet();
+            }}>
+                <FontAwesome5 name="ellipsis-v" size={15} color="#898888ff" />
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={() => handleDelete(item.id)}>
                 <FontAwesome name="trash" size={24} color="#ff4444" />
@@ -142,23 +153,24 @@ export default function Index() {
                 >
                     <BottomSheetView style={styles.modalContent}>
                         <Text style={styles.userText}>Contenido del modal</Text>
-                        <GHTouchableOpacity onPress={closeSheet} style={styles.modalTouch}>
+
+                        <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.username || "", "Email")} style={styles.modalTouch}>
                             <Text style={styles.bottomSheetText}>
                                 <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15, }} />
                                 Copiar Email
                             </Text>
                         </GHTouchableOpacity>
-                        <GHTouchableOpacity onPress={closeSheet} style={styles.modalTouch}>
+                        <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.password || "", "Contrasena")} style={styles.modalTouch}>
                             <Text style={styles.bottomSheetText}>
                                 <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15 }} />
                                 Copiar Password
                             </Text>
                         </GHTouchableOpacity>
 
-                        <GHTouchableOpacity onPress={handleDelete} style={styles.modalTouch}>
+                        <GHTouchableOpacity onPress={() => selectedItem && handleDelete(selectedItem.id)} style={styles.modalTouch}>
                             <Text style={styles.bottomSheetText}>
                                 <FontAwesome5 name="trash" size={20} color="#777" style={{ marginRight: 15 }} />
-                                Eliminar contraseña
+                                Eliminar
                             </Text>
                         </GHTouchableOpacity>
 
@@ -171,7 +183,7 @@ export default function Index() {
                     </BottomSheetView>
                 </BottomSheet>
             </View>
-        </GestureHandlerRootView>
+        </GestureHandlerRootView >
     );
 }
 
