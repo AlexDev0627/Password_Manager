@@ -20,7 +20,7 @@ export default function Index() {
     //funcion para abrir un modalBottomSheet
     const bottomSheetRef = useRef<BottomSheet>(null);
     //con useMemo definicmos los puntos de altura
-    const snapPoints = useMemo(() => ['25%', '50%'], []);
+    const snapPoints = useMemo(() => ['25%', '60%'], []);
     // funcion para abrir el modal
     const openSheet = () => { bottomSheetRef.current?.expand(); }
     // funcion para cerrar el modal
@@ -55,13 +55,16 @@ export default function Index() {
             loadPasswords();
         }, [loadPasswords])
     );
-
+    //funcion para eliminar una pass, luego cierra el modal y resetea el selectItem
     const handleDelete = async (id: string) => {
         if (Platform.OS === "web") {
             const confirmed = confirm("¿Estás seguro de que quieres eliminar esta contraseña?");
             if (confirmed) {
                 await deletePassword(id);
                 loadPasswords();
+
+                closeSheet();
+                setSelectedItem(null);
             }
             return;
         }
@@ -92,7 +95,8 @@ export default function Index() {
     // Funcion para copiar en el clipboard
     const copyToClipboard = async (text: string, label: string) => {
         await Clipboard.setStringAsync(text);
-        alert(`${label} copiado al portapapeles`)
+        alert(`${label} copiado al portapapeles`);
+        closeSheet();
     }
 
     // Funciona para renderizar cada item de la lista, en este caso las passwords
@@ -152,7 +156,15 @@ export default function Index() {
                     backgroundStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: theme === "dark" ? '#181a20' : '#f5f5f5' }}
                 >
                     <BottomSheetView style={styles.modalContent}>
-                        <Text style={styles.userText}>Contenido del modal</Text>
+                        {/* <Text style={styles.userText}>Contenido del modal</Text> */}
+                        <Avatar.Image
+                            size={45}
+                            source={{ uri: getFavIcon(selectedItem.site) }}
+                            style={{ backgroundColor: "transparent" }}
+                        />
+                        <Text style={styles.siteModalText}>
+                            Sitio: {selectedItem?.site}
+                        </Text>
 
                         <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.username || "", "Email")} style={styles.modalTouch}>
                             <Text style={styles.bottomSheetText}>
@@ -243,23 +255,35 @@ const lightStyles = StyleSheet.create({
         marginTop: 50,
         color: '#999',
     },
+    siteModalText: {
+        paddingTop: 5,
+        fontWeight: "bold"
+    },
     modalContent: {
+        marginTop: 5,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
+        width: '90%',
+        alignContent: "center",
+        margin: "auto"
     },
     modalTouch: {
-        width: '450px',
+        flexDirection: "row",
+        width: 400,
         marginTop: 20,
         padding: 10,
-        alignSelf: "center",
-        alignContent: "center",
+        alignItems: "center",
+        // justifyContent: "center",
         backgroundColor: 'transparent',
-        border: "2px solid #4435c993",
-        borderRadius: 10
+        borderRadius: 10,
+        borderColor: "#5f78caff",
+        borderWidth: 2,
+        height: 40
     },
     bottomSheetText: {
-        color: "black"
+        color: "black",
+        fontWeight: "500"
+
     }
 
 });
@@ -320,24 +344,35 @@ const darkStyles = StyleSheet.create({
         marginTop: 50,
         color: '#888', // Gris medio para mensajes vacíos
     },
+    siteModalText: {
+        paddingTop: 5,
+        fontWeight: "bold",
+        color: "white"
+    },
     modalContent: {
         alignItems: 'center',
         justifyContent: 'center',
-        display: "flex",
-        width: "100%",
+        width: '90%',
+        alignContent: "center",
+        margin: "auto"
+
 
     },
     modalTouch: {
-        width: '450px',
+        flexDirection: "row",
+        width: 400,
         marginTop: 20,
         padding: 10,
-        alignSelf: "center",
-        alignContent: "center",
+        alignItems: "center",
+        // justifyContent: "center",
         backgroundColor: 'transparent',
-        border: "2px solid #3a346d93",
-        borderRadius: 10
+        borderRadius: 10,
+        borderColor: "#5f78caff",
+        borderWidth: 2,
+        height: 40
     },
     bottomSheetText: {
         color: 'white',
-    }
+        fontWeight: "500"
+    },
 });
