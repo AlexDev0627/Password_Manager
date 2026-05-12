@@ -1,4 +1,4 @@
-# Simple Password Vault
+# Simple Password Vault🔒
 
 A lightweight Android application built with React Native and Expo to keep your credentials organized and secure. No more forgetting passwords or using the same one everywhere.
 
