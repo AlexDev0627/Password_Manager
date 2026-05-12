@@ -3,7 +3,8 @@ import { useState, useCallback } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Platform, Button } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import { getPasswords, deletePassword, PasswordEntry } from "@/utils/storage";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+// import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useTheme } from "@/context/ThemeContext";
 import { Avatar, } from "react-native-paper";
 import React, { useMemo, useRef } from 'react';
@@ -82,9 +83,12 @@ export default function Index() {
                 <Text style={styles.siteText}>{item.site}</Text>
                 <Text style={styles.userText}>{item.username}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                <FontAwesome name="trash" size={24} color="#ff4444" />
+             <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                <FontAwesome5 name="ellipsis-v" size={15} color="#898888ff" onPress={openSheet} />
             </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                <FontAwesome name="trash" size={24} color="#ff4444" />
+            </TouchableOpacity> */}
         </View>
     );
 
@@ -95,13 +99,13 @@ export default function Index() {
         <View style={styles.container}>
             <Text style={styles.header}>Gestor de contraseñas</Text>
             {/* modalBottomSheet */}
-            <Button title="Configuraciones" onPress={openSheet} />
+            {/* <Button title="Configuraciones" onPress={openSheet} /> */}
             <BottomSheet
                 ref={bottomSheetRef}
                 index={-1} // -1 significa que inicia OCULTO
                 snapPoints={snapPoints}
                 enablePanDownToClose={true} // Permite cerrar al deslizar abajo
-            >
+            >   
                 <BottomSheetView style={{ padding: 20 }}>
                     <Text>Este es el contenido del modal 🚀</Text>
                 </BottomSheetView>
