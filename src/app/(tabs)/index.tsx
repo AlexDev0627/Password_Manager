@@ -1,6 +1,7 @@
 import AvatarText from "@/components/avatarText";
 import { useState, useCallback } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Platform, Button } from "react-native";
+import { TouchableOpacity as GHTouchableOpacity } from '@gorhom/bottom-sheet';
 import { useFocusEffect, useRouter } from "expo-router";
 import { getPasswords, deletePassword, PasswordEntry } from "@/utils/storage";
 // import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -9,6 +10,8 @@ import { useTheme } from "@/context/ThemeContext";
 import { Avatar, } from "react-native-paper";
 import React, { useMemo, useRef } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
 export default function Index() {
@@ -16,9 +19,24 @@ export default function Index() {
     const bottomSheetRef = useRef<BottomSheet>(null);
     //con useMemo definicmos los puntos de altura
     const snapPoints = useMemo(() => ['25%', '50%'], []);
-    const openSheet = () => {
-        bottomSheetRef.current?.expand();
-    }
+    // funcion para abrir el modal
+    const openSheet = () => {bottomSheetRef.current?.expand();}
+    // funcion para cerrar el modal
+    const closeSheet = ()=> {bottomSheetRef.current?.close()}
+    // funcion para renderizar el fondo del modal
+    const renderBackdrop = useCallback((props: any)=>(
+        <BottomSheetBackdrop {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.5}
+        pressBehavior="close"
+        />
+    ),
+    []
+);
+    
+    
+    
     //Funcion para definir tema
     const { theme } = useTheme();
     const styles = theme === "dark" ? darkStyles : lightStyles;
@@ -95,21 +113,9 @@ export default function Index() {
 
     // Si no hay passwords guardaddas devolvemos el siguiente mensaje
     return (
-
+        <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={styles.container}>
             <Text style={styles.header}>Gestor de contraseñas</Text>
-            {/* modalBottomSheet */}
-            {/* <Button title="Configuraciones" onPress={openSheet} /> */}
-            <BottomSheet
-                ref={bottomSheetRef}
-                index={-1} // -1 significa que inicia OCULTO
-                snapPoints={snapPoints}
-                enablePanDownToClose={true} // Permite cerrar al deslizar abajo
-            >   
-                <BottomSheetView style={{ padding: 20 }}>
-                    <Text>Este es el contenido del modal 🚀</Text>
-                </BottomSheetView>
-            </BottomSheet>
 
             {/* ////////////////////////// */}
             {passwords.length === 0 ? (
@@ -123,7 +129,25 @@ export default function Index() {
                     contentContainerStyle={styles.listContent}
                 />
             )}
+
+             {/* modalBottomSheet */}
+            {/* <Button title="Configuraciones" onPress={openSheet} /> */}
+            <BottomSheet
+                ref={bottomSheetRef}
+                index={-1} // -1 significa que inicia OCULTO
+                snapPoints={snapPoints}
+                enablePanDownToClose={true} // Permite cerrar al deslizar abajo
+                backdropComponent={renderBackdrop} // Fondo personalizado
+            >   
+                <BottomSheetView style={styles.modalContent}>
+                    <Text>Este es el contenido del modal 🚀</Text>
+                    <GHTouchableOpacity  onPress={closeSheet} style={{ marginTop: 20, padding: 10, backgroundColor: '#007bff', borderRadius: 5 }}>
+                        <Text style={{ color: 'white' }}>Cerrar Modal</Text>
+                    </GHTouchableOpacity>
+                </BottomSheetView>
+            </BottomSheet>
         </View>
+        </GestureHandlerRootView>
     );
 }
 
@@ -182,7 +206,12 @@ const lightStyles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 50,
         color: '#999',
-    }
+    },
+    modalContent: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
+    },
 });
 
 const darkStyles = StyleSheet.create({
@@ -240,5 +269,11 @@ const darkStyles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 50,
         color: '#888', // Gris medio para mensajes vacíos
+    },
+    modalContent:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#424349ff', 
+        
     }
 });
