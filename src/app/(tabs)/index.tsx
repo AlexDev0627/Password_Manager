@@ -138,12 +138,35 @@ export default function Index() {
                 snapPoints={snapPoints}
                 enablePanDownToClose={true} // Permite cerrar al deslizar abajo
                 backdropComponent={renderBackdrop} // Fondo personalizado
-                backgroundStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: theme === "dark" ? '#23242a' : '#f5f5f5' }}
+                backgroundStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: theme === "dark" ? '#181a20' : '#f5f5f5' }}
             >
                 <BottomSheetView style={styles.modalContent}>
-                    <Text style={styles.userText}>Este es el contenido del modal 🚀</Text>
-                    <GHTouchableOpacity  onPress={closeSheet} style={{ marginTop: 20, padding: 10, backgroundColor: '#007bff', borderRadius: 5 }}>
-                        <Text style={{ color: 'white' }}>Cerrar Modal</Text>
+                    <Text style={styles.userText}>Contenido del modal</Text>
+                    <GHTouchableOpacity  onPress={closeSheet} style={styles.modalTouch}>
+                        <Text style={styles.bottomSheetText}>
+                            <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15, }} />
+                            Copiar Email
+                        </Text>
+                    </GHTouchableOpacity>
+                    <GHTouchableOpacity  onPress={closeSheet} style={styles.modalTouch}>
+                        <Text style={styles.bottomSheetText}>
+                            <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15 }} />
+                            Copiar Password
+                        </Text>
+                    </GHTouchableOpacity>
+
+                     <GHTouchableOpacity  onPress={handleDelete} style={styles.modalTouch}>
+                        <Text style={styles.bottomSheetText}>
+                            <FontAwesome5 name="trash" size={20} color="#777" style={{ marginRight: 15 }} />
+                            Eliminar contraseña
+                        </Text>
+                    </GHTouchableOpacity>
+
+                    <GHTouchableOpacity  onPress={closeSheet} style={styles.modalTouch}>
+                        <Text style={{ color: 'white' }}>
+                             <FontAwesome5 name="times" size={20} color="#777" style={{ marginRight: 15 }} />
+                                Cerrar Modal
+                            </Text>
                     </GHTouchableOpacity>
                 </BottomSheetView>
             </BottomSheet>
@@ -213,6 +236,15 @@ const lightStyles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#f5f5f5',
     },
+    modalTouch:{
+        width:'80%',
+        marginTop: 20,
+         padding: 10,
+         backgroundColor: '#007bff',
+         borderRadius: 5,
+        borderBlockColor:"#bd41dcff",
+    },
+    
 });
 
 const darkStyles = StyleSheet.create({
@@ -274,6 +306,21 @@ const darkStyles = StyleSheet.create({
     modalContent:{
         alignItems: 'center',
         justifyContent: 'center', 
+        display:"flex",
+        width:"100%",
        
+    },
+    modalTouch:{
+         width:'450px',
+         marginTop: 20,
+         padding: 10,
+         alignSelf: "center",
+         alignContent: "center",
+         backgroundColor: 'transparent',
+         border: "2px solid #3a346d93",
+         borderRadius: 10
+    },
+    bottomSheetText:{
+        color: 'white',
     }
 });
