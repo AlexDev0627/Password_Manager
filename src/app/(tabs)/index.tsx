@@ -138,9 +138,10 @@ export default function Index() {
                 snapPoints={snapPoints}
                 enablePanDownToClose={true} // Permite cerrar al deslizar abajo
                 backdropComponent={renderBackdrop} // Fondo personalizado
-            >   
+                backgroundStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: theme === "dark" ? '#23242a' : '#f5f5f5' }}
+            >
                 <BottomSheetView style={styles.modalContent}>
-                    <Text>Este es el contenido del modal 🚀</Text>
+                    <Text style={styles.userText}>Este es el contenido del modal 🚀</Text>
                     <GHTouchableOpacity  onPress={closeSheet} style={{ marginTop: 20, padding: 10, backgroundColor: '#007bff', borderRadius: 5 }}>
                         <Text style={{ color: 'white' }}>Cerrar Modal</Text>
                     </GHTouchableOpacity>
@@ -272,8 +273,7 @@ const darkStyles = StyleSheet.create({
     },
     modalContent:{
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#424349ff', 
-        
+        justifyContent: 'center', 
+       
     }
 });
