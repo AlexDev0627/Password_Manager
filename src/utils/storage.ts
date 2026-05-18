@@ -73,44 +73,51 @@ export async function deletePassword(id: string): Promise<void> {
   }
 }
 
-export async function updatePasswords(updatedEntry: PasswordEntry): Promise <void>{
-  try{  
+export async function updatePasswords(updatedEntry: PasswordEntry): Promise<void> {
+  try {
     //Buscamos las pass
     const existingPasswords = await getPasswords();
     //Actualizamos la pass que coincida con el ID manteniendo las demas sin cambios
-    const updatedPasswords =  existingPasswords.map((pass)=> pass.id === updatedEntry.id ? {...pass, ...updatedEntry}: pass);
+    const updatedPasswords = existingPasswords.map((pass) => pass.id === updatedEntry.id ? { ...pass, ...updatedEntry } : pass);
     //Formateamos el array actualizado a string para guardarlo
     const stringValue = JSON.stringify(updatedPasswords);
 
-    if(Platform.OS === "web"){
-      localStorage.setItem(PASSWORDS_KEY,stringValue);
-    }else{
-      await SecureStore.setItemAsync(PASSWORDS_KEY,stringValue);
+    if (Platform.OS === "web") {
+      localStorage.setItem(PASSWORDS_KEY, stringValue);
+    } else {
+      await SecureStore.setItemAsync(PASSWORDS_KEY, stringValue);
     }
-  
-  }catch(error){
+
+  } catch (error) {
     console.error("Error updating password:", error);
     throw error;
   }
 }
 export async function saveMultiplePasswords(newEntries: PasswordEntry[]): Promise<void> {
-  try{
+  try {
     const existingPasswords = await getPasswords();
-    const newEntriesMap = new Map(newEntries.map(pass => [pass.id, pass]));
-    const updatedPasswords = [...existingPasswords.filter((pass)=> !newEntriesMap.has(pass.id)), ...newEntries]
+    //sanitizamos los id para que sean de tipo string
+    const sanitizedEntries = newEntries.map((pass) => ({
+      ...pass,
+      id: String(pass.id)
+    }))
+    //creamos un nuevo mapa con los datos sanitizados
+    const newEntriesMap = new Map(sanitizedEntries.map(pass => [pass.id, pass]));
+    //filtramos
+    const updatedPasswords = [...existingPasswords.filter((pass) => !newEntriesMap.has(pass.id)), ...sanitizedEntries]
     const stringValue = JSON.stringify(updatedPasswords);
 
-    if(Platform.OS === "web"){
+    if (Platform.OS === "web") {
       alert("Contraseñas importadas correctamente")
-      localStorage.setItem(PASSWORDS_KEY, stringValue )
-    }else{
+      localStorage.setItem(PASSWORDS_KEY, stringValue)
+    } else {
       Alert.alert("Importación exitosa", "Contraseñas importadas correctamente")
       SecureStore.setItemAsync(PASSWORDS_KEY, stringValue);
     }
-  }catch(error){
-    if(Platform.OS ==="web"){
+  } catch (error) {
+    if (Platform.OS === "web") {
       alert("Error al guardar")
-    }else{
+    } else {
       Alert.alert("Error al intentar guardar")
     }
   }
