@@ -88,7 +88,8 @@ export default function Index() {
     // funcion para limpiar y buscar la imagen de un dominio
     const getFavIcon = (domain: string) => {
         // formateamos el dominio
-        const cleadDomain = domain.trim().toLocaleLowerCase();
+        // si el domain es undefined .trim() no se ejecuta y devuelve un valor por defecto
+        const cleadDomain = domain?.trim().toLocaleLowerCase() || "";
 
         return `https://www.google.com/s2/favicons?sz=128&domain=${cleadDomain}.com`;
     };
@@ -101,7 +102,7 @@ export default function Index() {
 
     // Funciona para renderizar cada item de la lista, en este caso las passwords
     const renderItem = ({ item }: { item: PasswordEntry }) => (
-        <View style={styles.card}>
+        <View style={styles.card} key={item.id}>
             <Avatar.Image
                 size={35}
                 source={{ uri: getFavIcon(item.site) }}
@@ -168,10 +169,12 @@ export default function Index() {
                         <Text style={styles.siteModalText}>
                             Sitio: {selectedItem?.site}
                         </Text>
-                        <GHTouchableOpacity onPress={() =>{if(selectedItem && selectedItem.id){
-                            router.push(`/updatePass/${selectedItem.id}` );
-                            closeSheet();
-                        }}} style={styles.modalTouch}>
+                        <GHTouchableOpacity onPress={() => {
+                            if (selectedItem && selectedItem.id) {
+                                router.push(`/updatePass/${selectedItem.id}`);
+                                closeSheet();
+                            }
+                        }} style={styles.modalTouch}>
                             <Text style={styles.bottomSheetText}>
                                 <FontAwesome5 name="edit" size={20} color="#777" style={{ marginRight: 15, }} />
                                 Editar contraseña
