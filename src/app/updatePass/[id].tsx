@@ -10,51 +10,51 @@ import { TextInput } from "react-native-gesture-handler";
 
 
 
-    export default function UpdatedPass(){
-    
+export default function UpdatedPass() {
+
     const { theme } = useTheme();
     const styles = theme === "dark" ? darkStyles : lightStyles;
-    const {id} = useLocalSearchParams();
+    const { id } = useLocalSearchParams();
     const router = useRouter();
-    const [password, setPassword] =useState<PasswordEntry | null>(null);
-    
+    const [password, setPassword] = useState<PasswordEntry | null>(null);
+
     /////Estados para actualizar los campos de la pass
     const [site, setSite] = useState("");
     const [username, setUsername] = useState("");
     const [pass, setPass] = useState<PasswordEntry["password"]>("");
 
-    
+
     //Estado para ver o no la pass
     const [showPassword, setShowPassword] = useState(false)
-    
+
     //UseEffect para cargar la pass a actualizar segun el ID que se le paso por params
     useEffect(() => {
         const fetchPassword = async () => {
             const pass = await getPasswords();
-            const found = pass.find((p)=> p.id === id);
+            const found = pass.find((p) => p.id === id);
             setPassword(found || null);
         }
         fetchPassword();
-    },[id]);
+    }, [id]);
 
     ///UseEffect para actualizar los estados de los campos con la pass encontrada
-    useEffect(() =>{
-        if(password){
+    useEffect(() => {
+        if (password) {
             setSite(password.site);
             setUsername(password.username);
             setPass(password.password);
-        }else{
+        } else {
             setSite("");
             setUsername("");
             setPass("");
         }
 
-    },[password]);
+    }, [password]);
 
-    
 
-    const handleUpdate = async () =>{
-        try{
+
+    const handleUpdate = async () => {
+        try {
             const updateEntry = {
                 id: id as string,
                 site: site,
@@ -63,35 +63,35 @@ import { TextInput } from "react-native-gesture-handler";
             }
             await updatePasswords(updateEntry)
 
-            if(Platform.OS === "web"){
+            if (Platform.OS === "web") {
                 alert("Contrasena actualizada correctamente");
-            }else{Alert.alert("Actualizacion exitosa")}
-        
-        }catch(error){
+            } else { Alert.alert("Actualizacion exitosa") }
+
+        } catch (error) {
             alert("Hubo un error al intentar actualizar" + error);
-            throw(error);
+            throw (error);
         }
     }
 
     const copyToClipboard = async (text: string, label: string) => {
-            await Clipboard.setStringAsync(text);
-            alert(`${label} copiado al portapapeles`)
-        };
+        await Clipboard.setStringAsync(text);
+        alert(`${label} copiado al portapapeles`)
+    };
 
-        const getFavIcon = (domain: string)=>{
-            const cleanedDomain = domain.trim().toLocaleLowerCase();
-           return `https://www.google.com/s2/favicons?sz=128&domain=${cleanedDomain}.com`;
-        }
+    const getFavIcon = (domain: string) => {
+        const cleanedDomain = domain?.trim().toLocaleLowerCase();
+        return `https://www.google.com/s2/favicons?sz=128&domain=${cleanedDomain}.com`;
+    }
 
-    if(!password){
-        return(
+    if (!password) {
+        return (
             <View style={styles.container}>
                 <Text style={styles.backText}>Cargando contraseña...</Text>
             </View>
         );
     }
-        
-         return (
+
+    return (
 
         <ScrollView
             style={styles.container}
@@ -107,7 +107,7 @@ import { TextInput } from "react-native-gesture-handler";
                     size={55}
                     source={{ uri: getFavIcon(password.site) }}
                     style={{ backgroundColor: "transparent" }} />
-                <Text style={{fontSize:15, color:"white", marginTop:10}}>Actualizar Contraseña</Text>
+                <Text style={{ fontSize: 15, color: "white", marginTop: 10 }}>Actualizar Contraseña</Text>
                 <Text style={styles.title}>{password.site}</Text>
 
             </View>
@@ -118,7 +118,7 @@ import { TextInput } from "react-native-gesture-handler";
                     <Text style={styles.label}>Sitio</Text>
                     <View style={styles.infoRow}>
                         <FontAwesome name="user" size={18} color="#666" />
-                         <TextInput value={site} onChangeText={(text) => setSite(text)} style={styles.value} placeholder="Ej: google.com" />
+                        <TextInput value={site} onChangeText={(text) => setSite(text)} style={styles.value} placeholder="Ej: google.com" />
                     </View>
                 </View>
                 {/* Usuario */}
@@ -126,7 +126,7 @@ import { TextInput } from "react-native-gesture-handler";
                     <Text style={styles.label}>Nombre de Usuario / Correo</Text>
                     <View style={styles.infoRow}>
                         <FontAwesome name="user" size={18} color="#666" />
-                        <TextInput value={username} onChangeText={(text)=> setUsername(text)} style={styles.value} placeholder="Nombre de Usuario / Correo"/>
+                        <TextInput value={username} onChangeText={(text) => setUsername(text)} style={styles.value} placeholder="Nombre de Usuario / Correo" />
                     </View>
                 </View>
 
@@ -139,8 +139,8 @@ import { TextInput } from "react-native-gesture-handler";
                         <View style={styles.infoRow}>
                             <FontAwesome name="key" size={18} color="#666" />
 
-                                    {/* estilos para mostrar o no la password */}
-                                    <TextInput value={pass} onChangeText={(text)=> setPass(text)} style={styles.value} secureTextEntry={!showPassword}/>
+                            {/* estilos para mostrar o no la password */}
+                            <TextInput value={pass} onChangeText={(text) => setPass(text)} style={styles.value} secureTextEntry={!showPassword} />
                         </View>
                         {/* El botón que cambia el estado booleano */}
                         <TouchableOpacity
@@ -157,7 +157,7 @@ import { TextInput } from "react-native-gesture-handler";
                 </View>
             </View>
             <View>
-                <Button onPress ={handleUpdate}>Guardar</Button>
+                <Button onPress={handleUpdate}>Guardar</Button>
             </View>
         </ScrollView>
 
@@ -242,9 +242,9 @@ const lightStyles = StyleSheet.create({
         fontSize: 18,
         color: "#333",
         fontWeight: "600",
-        borderWidth:1,
-        borderColor:"red",
-        borderRadius:5
+        borderWidth: 1,
+        borderColor: "red",
+        borderRadius: 5
     },
     passwordText: {
         fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
@@ -357,9 +357,9 @@ const darkStyles = StyleSheet.create({
         fontSize: 18,
         color: "#fff", // Valores claros
         fontWeight: "600",
-         borderWidth:1,
-        borderColor:"red",
-        borderRadius:5
+        borderWidth: 1,
+        borderColor: "red",
+        borderRadius: 5
     },
     passwordText: {
         fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
@@ -394,4 +394,3 @@ const darkStyles = StyleSheet.create({
         fontStyle: 'italic',
     },
 });
-    
