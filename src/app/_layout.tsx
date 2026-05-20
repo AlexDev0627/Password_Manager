@@ -8,7 +8,7 @@ export default function Layout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
         <SafeAreaView style={{ flex: 1 }}>
-          <Stack>
+          <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen
               name="(tabs)"
               options={{
