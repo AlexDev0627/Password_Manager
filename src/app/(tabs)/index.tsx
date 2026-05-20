@@ -190,57 +190,72 @@ export default function Index() {
                     snapPoints={snapPoints}
                     enablePanDownToClose={true} // Permite cerrar al deslizar abajo
                     backdropComponent={renderBackdrop} // Fondo personalizado
-                    backgroundStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16, backgroundColor: theme === "dark" ? '#181a20' : '#f5f5f5' }}
+                    backgroundStyle={styles.bottomSheetBg}
+                    handleIndicatorStyle={styles.handleIndicator}
                 >
                     <BottomSheetView style={styles.modalContent}>
-                        {/* <Text style={styles.userText}>Contenido del modal</Text> */}
-                        {/* //Validamos selectedItem */}
                         {selectedItem && (
-                            <Avatar.Image
-                                size={45}
-                                source={{ uri: getFavIcon(selectedItem.site) }}
-                                style={{ backgroundColor: "transparent" }}
-                            />
+                            <View style={styles.modalHeader}>
+                                <Avatar.Image
+                                    size={40}
+                                    source={{ uri: getFavIcon(selectedItem.site) }}
+                                    style={styles.modalAvatar}
+                                />
+                                <View style={styles.modalHeaderTitleContainer}>
+                                    <Text style={styles.siteModalText}>{selectedItem.site}</Text>
+                                    <Text style={styles.userModalText}>{selectedItem.username}</Text>
+                                </View>
+                            </View>
                         )}
-                        <Text style={styles.siteModalText}>
-                            Sitio: {selectedItem?.site}
-                        </Text>
+
                         <GHTouchableOpacity onPress={() => {
                             if (selectedItem && selectedItem.id) {
                                 router.push(`/updatePass/${selectedItem.id}`);
                                 closeSheet();
                             }
-                        }} style={styles.modalTouch}>
-                            <Text style={styles.bottomSheetText}>
-                                <FontAwesome5 name="edit" size={20} color="#777" style={{ marginRight: 15, }} />
-                                Editar contraseña
-                            </Text>
-                        </GHTouchableOpacity>
-                        <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.username || "", "Email")} style={styles.modalTouch}>
-                            <Text style={styles.bottomSheetText}>
-                                <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15, }} />
-                                Copiar Email
-                            </Text>
-                        </GHTouchableOpacity>
-                        <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.password || "", "Contrasena")} style={styles.modalTouch}>
-                            <Text style={styles.bottomSheetText}>
-                                <FontAwesome5 name="copy" size={20} color="#777" style={{ marginRight: 15 }} />
-                                Copiar Password
-                            </Text>
+                        }} style={styles.modalOption}>
+                            <View style={[styles.iconContainer, { backgroundColor: theme === "dark" ? '#1e293b' : '#eef2ff' }]}>
+                                <FontAwesome5 name="edit" size={16} color="#5f78ca" />
+                            </View>
+                            <View style={styles.optionTextContainer}>
+                                <Text style={styles.optionTitle}>Editar contraseña</Text>
+                            </View>
                         </GHTouchableOpacity>
 
-                        <GHTouchableOpacity onPress={() => selectedItem && handleDelete(selectedItem.id)} style={styles.modalTouch}>
-                            <Text style={styles.bottomSheetText}>
-                                <FontAwesome5 name="trash" size={20} color="#777" style={{ marginRight: 15 }} />
-                                Eliminar
-                            </Text>
+                        <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.username || "", "Email")} style={styles.modalOption}>
+                            <View style={[styles.iconContainer, { backgroundColor: theme === "dark" ? '#162e24' : '#f0fdf4' }]}>
+                                <FontAwesome5 name="envelope" size={16} color="#10b981" />
+                            </View>
+                            <View style={styles.optionTextContainer}>
+                                <Text style={styles.optionTitle}>Copiar Email</Text>
+                            </View>
                         </GHTouchableOpacity>
 
-                        <GHTouchableOpacity onPress={closeSheet} style={styles.modalTouch}>
-                            <Text style={styles.bottomSheetText}>
-                                <FontAwesome5 name="times" size={20} color="#777" style={{ marginRight: 15 }} />
-                                Cerrar Modal
-                            </Text>
+                        <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.password || "", "Contrasena")} style={styles.modalOption}>
+                            <View style={[styles.iconContainer, { backgroundColor: theme === "dark" ? '#2e251b' : '#fef3c7' }]}>
+                                <FontAwesome5 name="key" size={16} color="#d97706" />
+                            </View>
+                            <View style={styles.optionTextContainer}>
+                                <Text style={styles.optionTitle}>Copiar Password</Text>
+                            </View>
+                        </GHTouchableOpacity>
+
+                        <GHTouchableOpacity onPress={() => selectedItem && handleDelete(selectedItem.id)} style={styles.modalOption}>
+                            <View style={[styles.iconContainer, { backgroundColor: theme === "dark" ? '#3b1e1e' : '#fef2f2' }]}>
+                                <FontAwesome5 name="trash" size={16} color="#ef4444" />
+                            </View>
+                            <View style={styles.optionTextContainer}>
+                                <Text style={styles.optionTitle}>Eliminar</Text>
+                            </View>
+                        </GHTouchableOpacity>
+
+                        <GHTouchableOpacity onPress={closeSheet} style={styles.modalOption}>
+                            <View style={[styles.iconContainer, { backgroundColor: theme === "dark" ? '#2d3139' : '#f1f5f9' }]}>
+                                <FontAwesome5 name="times" size={16} color="#64748b" />
+                            </View>
+                            <View style={styles.optionTextContainer}>
+                                <Text style={styles.optionTitle}>Cerrar Modal</Text>
+                            </View>
                         </GHTouchableOpacity>
                     </BottomSheetView>
                 </BottomSheet>
@@ -342,36 +357,79 @@ const lightStyles = StyleSheet.create({
         marginTop: 50,
         color: '#999',
     },
-    siteModalText: {
-        paddingTop: 5,
-        fontWeight: "bold"
+    bottomSheetBg: {
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        backgroundColor: '#ffffff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.08,
+        shadowRadius: 12,
+        elevation: 10,
+    },
+    handleIndicator: {
+        backgroundColor: '#cbd5e1',
+        width: 40,
+        height: 4,
     },
     modalContent: {
-        marginTop: 5,
+        paddingHorizontal: 24,
+        paddingTop: 10,
+        paddingBottom: 24,
+        alignItems: 'stretch',
+        width: '100%',
+    },
+    modalHeader: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        width: '90%',
-        alignContent: "center",
-        margin: "auto"
+        marginBottom: 20,
+        paddingBottom: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f1f5f9',
     },
-    modalTouch: {
-        flexDirection: "row",
-        width: 400,
-        marginTop: 20,
-        padding: 10,
-        alignItems: "center",
-        // justifyContent: "center",
+    modalAvatar: {
         backgroundColor: 'transparent',
-        borderRadius: 10,
-        borderColor: "#5f78caff",
-        borderWidth: 2,
-        height: 40
     },
-    bottomSheetText: {
-        color: "black",
-        fontWeight: "500"
-
-    }
+    modalHeaderTitleContainer: {
+        marginLeft: 16,
+    },
+    siteModalText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#0f172a',
+    },
+    userModalText: {
+        fontSize: 14,
+        color: '#64748b',
+        marginTop: 2,
+    },
+    modalOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#eeeeeec5',
+        padding: 12,
+        borderRadius: 14,
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: '#e9e9e9ff',
+        width: '100%',
+    },
+    iconContainer: {
+        width: 38,
+        height: 38,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    optionTextContainer: {
+        flex: 1,
+        marginLeft: 16,
+    },
+    optionTitle: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#1e293b',
+    },
 
 });
 
@@ -468,35 +526,77 @@ const darkStyles = StyleSheet.create({
         marginTop: 50,
         color: '#888', // Gris medio para mensajes vacíos
     },
-    siteModalText: {
-        paddingTop: 5,
-        fontWeight: "bold",
-        color: "white"
+    bottomSheetBg: {
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        backgroundColor: '#1c1f26',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 12,
+        elevation: 10,
+    },
+    handleIndicator: {
+        backgroundColor: '#475569',
+        width: 40,
+        height: 4,
     },
     modalContent: {
+        paddingHorizontal: 24,
+        paddingTop: 10,
+        paddingBottom: 24,
+        alignItems: 'stretch',
+        width: '100%',
+    },
+    modalHeader: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        width: '90%',
-        alignContent: "center",
-        margin: "auto"
-
-
+        marginBottom: 20,
+        paddingBottom: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#2e333d',
     },
-    modalTouch: {
-        flexDirection: "row",
-        width: 400,
-        marginTop: 20,
-        padding: 10,
-        alignItems: "center",
-        // justifyContent: "center",
+    modalAvatar: {
         backgroundColor: 'transparent',
-        borderRadius: 10,
-        borderColor: "#5f78caff",
-        borderWidth: 2,
-        height: 40
     },
-    bottomSheetText: {
-        color: 'white',
-        fontWeight: "500"
+    modalHeaderTitleContainer: {
+        marginLeft: 16,
+    },
+    siteModalText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#ffffff',
+    },
+    userModalText: {
+        fontSize: 14,
+        color: '#94a3b8',
+        marginTop: 2,
+    },
+    modalOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#252932',
+        padding: 12,
+        borderRadius: 14,
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: '#2e333d',
+        width: '100%',
+    },
+    iconContainer: {
+        width: 38,
+        height: 38,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    optionTextContainer: {
+        flex: 1,
+        marginLeft: 16,
+    },
+    optionTitle: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#ffffff',
     },
 });
