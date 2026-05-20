@@ -41,7 +41,6 @@ export default function Details() {
             </View>
         );
     }
-    { console.log("El valor de createdAt es:", password.createdAt) };
 
     const getFavIcon = (domain: string) => {
         const cleanedDomain = domain.trim().toLowerCase();
