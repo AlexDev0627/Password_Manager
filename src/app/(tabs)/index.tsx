@@ -20,7 +20,7 @@ export default function Index() {
     //funcion para abrir un modalBottomSheet
     const bottomSheetRef = useRef<BottomSheet>(null);
     //con useMemo definicmos los puntos de altura
-    const snapPoints = useMemo(() => ['25%', '65%'], []);
+    const snapPoints = useMemo(() => ['25%', '55%'], []);
     // funcion para abrir el modal
     const openSheet = () => { bottomSheetRef.current?.expand(); }
     // funcion para cerrar el modal
@@ -168,10 +168,13 @@ export default function Index() {
                         <Text style={styles.siteModalText}>
                             Sitio: {selectedItem?.site}
                         </Text>
-                        <GHTouchableOpacity onPress={() => selectedItem && (selectedItem.username || "", "Email")} style={styles.modalTouch}>
+                        <GHTouchableOpacity onPress={() =>{if(selectedItem && selectedItem.id){
+                            router.push(`/updatePass/${selectedItem.id}` );
+                            closeSheet();
+                        }}} style={styles.modalTouch}>
                             <Text style={styles.bottomSheetText}>
                                 <FontAwesome5 name="edit" size={20} color="#777" style={{ marginRight: 15, }} />
-                                Editar campo
+                                Editar contraseña
                             </Text>
                         </GHTouchableOpacity>
                         <GHTouchableOpacity onPress={() => selectedItem && copyToClipboard(selectedItem.username || "", "Email")} style={styles.modalTouch}>
