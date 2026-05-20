@@ -45,8 +45,9 @@ export default function Index() {
     const [selectedItem, setSelectedItem] = useState<PasswordEntry | null>(null);
     //estado para la busqueda
     const [query, setQuery] = useState("");
-    console.log(query) 
-    
+    //estado para el focus de la barra de busqueda
+    const [isFocused, setIsFocused] = useState(false);
+
     const router = useRouter()
     const loadPasswords = useCallback(async () => {
         const stored = await getPasswords();
@@ -103,8 +104,8 @@ export default function Index() {
         closeSheet();
     };
 
-//funcion para filtrar por búsquedas las passwords
-const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().includes(query.toLowerCase()));
+    //funcion para filtrar por búsquedas las passwords
+    const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().includes(query.toLowerCase()));
 
 
     // Funciona para renderizar cada item de la lista, en este caso las passwords
@@ -134,25 +135,36 @@ const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().inc
     );
 
 
-   
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <Text style={styles.header}>Gestor de contraseñas</Text>
-           <View style={styles.searchContainer}>
-             <FontAwesome5 
-                name="search" 
-                size={16} 
-                color={theme === "dark" ? '#bbb' : '#666'} 
-             />
-             <TextInput 
-                value={query}
-                onChangeText={setQuery}
-                placeholder="Buscar..."
-                placeholderTextColor={theme === "dark" ? '#666' : '#999'} // placeholde tambien de adapta al tema
-                style={styles.searchInput}
-            />
-        </View>
+                <View style={[styles.searchContainer, isFocused && styles.searchContainerFocused]}>
+                    <FontAwesome5
+                        name="search"
+                        size={16}
+                        color={isFocused ? '#5f78ca' : (theme === "dark" ? '#888' : '#777')}
+                    />
+                    <TextInput
+                        value={query}
+                        onChangeText={setQuery}
+                        placeholder="Buscar..."
+                        placeholderTextColor={theme === "dark" ? '#555' : '#aaa'} // placeholder también se adapta al tema
+                        style={styles.searchInput}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                    />
+                    {query.length > 0 && (
+                        <TouchableOpacity onPress={() => setQuery("")} style={styles.clearButton}>
+                            <FontAwesome5
+                                name="times-circle"
+                                size={16}
+                                color={theme === "dark" ? '#888' : '#777'}
+                            />
+                        </TouchableOpacity>
+                    )}
+                </View>
 
                 {/* // Si no hay passwords guardaddas devolvemos el siguiente mensaje */}
                 {/* ////////////////////////// */}
@@ -160,7 +172,7 @@ const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().inc
                     <Text style={styles.emptyText}>No tienes contraseñas guardadas aún.</Text>
                 ) : filteredPasswords.length === 0 ? (
                     <Text style={styles.emptyText}>No hay coincidencias para {query}</Text>
-                ): (
+                ) : (
 
                     <FlatList
                         data={filteredPasswords}
@@ -247,26 +259,39 @@ const lightStyles = StyleSheet.create({
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'white', // Fondo blanco como tus cards
+        backgroundColor: '#ffffff',
         paddingHorizontal: 16,
-        borderRadius: 16,
-        marginBottom: 30,         
-        width: 350,               
-        height: 50,               
-        alignSelf: 'center',      // Centra la barra en la pantalla
+        borderRadius: 14,
+        marginBottom: 25,
+        width: 350,
+        height: 50,
+        alignSelf: 'center',
+        borderWidth: 1.5,
+        borderColor: '#e2e8f0',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.04,
+        shadowRadius: 10,
+        elevation: 2,
+    },
+    searchContainerFocused: {
+        borderColor: '#5f78ca',
+        shadowColor: '#5f78ca',
         shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,            
+        shadowRadius: 8,
+        elevation: 4,
     },
     searchInput: {
         flex: 1,
         height: '100%',
-        color: '#333',            
+        color: '#1a202c',
         fontSize: 16,
         paddingVertical: 0,
         marginLeft: 10,           // Separa el texto del icono
+    },
+    clearButton: {
+        padding: 4,
+        marginLeft: 5,
     },
     header: {
         fontSize: 24,
@@ -367,26 +392,39 @@ const darkStyles = StyleSheet.create({
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#23242a', 
+        backgroundColor: '#1f222a',
         paddingHorizontal: 16,
-        borderRadius: 16,
-        marginBottom: 30,
+        borderRadius: 14,
+        marginBottom: 25,
         width: 350,
         height: 50,
         alignSelf: 'center',
+        borderWidth: 1.5,
+        borderColor: '#2d3139',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
         elevation: 4,
+    },
+    searchContainerFocused: {
+        borderColor: '#5f78ca',
+        shadowColor: '#5f78ca',
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 6,
     },
     searchInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',          
+        color: '#ffffff',
         fontSize: 16,
         paddingVertical: 0,
         marginLeft: 10,
+    },
+    clearButton: {
+        padding: 4,
+        marginLeft: 5,
     },
     listContent: {
         paddingHorizontal: 20,
@@ -394,7 +432,7 @@ const darkStyles = StyleSheet.create({
     },
     card: {
         alignContent: "center",
-        backgroundColor: '#23242a', // Fondo más oscuro para la tarjeta
+        backgroundColor: '#23242a',
         paddingVertical: 12,
         paddingHorizontal: 16,
         borderRadius: 16,
