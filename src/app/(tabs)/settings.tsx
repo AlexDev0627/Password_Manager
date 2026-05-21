@@ -47,6 +47,43 @@ export default function Tab() {
           style={styles.listItem}
         />
       </List.Section>
+      <List.Section title="Exportaciones" style={styles.section}>
+         <List.Item
+          title="Importar Contraseñas"
+          description="Importar contraseñas en formato cvs"
+          left={() => <List.Icon icon="import" color={styles.iconColor.color} />}
+          right={() => (
+            <Button
+              mode={theme === "light" ? "contained" : "outlined"}
+              onPress={() => {}}
+              disabled={false}
+            >
+              Importar
+            </Button>
+          )}
+          titleStyle={styles.listItemTitle}
+          descriptionStyle={styles.listItemDescription}
+          style={styles.listItem}
+        />
+
+        <List.Item
+          title="Exportar Contraseñas"
+          description="Exportar contraseñas en formato cvs"
+          left={() => <List.Icon icon="export" color={styles.iconColor.color} />}
+          right={() => (
+            <Button
+              mode={theme === "light" ? "contained" : "outlined"}
+              onPress={() => {}}
+              disabled={false}
+            >
+              Exportar
+            </Button>
+          )}
+          titleStyle={styles.listItemTitle}
+          descriptionStyle={styles.listItemDescription}
+          style={styles.listItem}
+        />
+      </List.Section>
     </View>
   );
 }
