@@ -70,3 +70,22 @@ export async function deletePassword(id: string): Promise<void> {
     throw error;
   }
 }
+
+export async function updatePasswords(updatedEntry: PasswordEntry): Promise <void>{
+  try{  
+    //Buscamos las pass
+    const existingPasswords = await getPasswords();
+    const updatedPasswords =  existingPasswords.map((pass)=> pass.id === updatedEntry.id ? {...pass, ...updatedEntry}: pass);
+    const stringValue = JSON.stringify(updatedPasswords);
+
+    if(Platform.OS === "web"){
+      localStorage.setItem(PASSWORDS_KEY,stringValue);
+    }else{
+      await SecureStore.setItemAsync(PASSWORDS_KEY,stringValue);
+    }
+  
+  }catch(error){
+    console.error("Error updating password:", error);
+    throw error;
+  }
+}
