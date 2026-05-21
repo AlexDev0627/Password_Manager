@@ -1,10 +1,17 @@
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from '@/context/ThemeContext';
 import { Text, Button, List, Divider } from 'react-native-paper';
+import { exportToCSV} from '@/utils/exportToCsv'
+import { getPasswords } from '@/utils/storage';
 
 export default function Tab() {
   const { theme, setTheme } = useTheme();
   const styles = theme === "dark" ? darkStyles : lightStyles;
+
+  const handleExport = async()=>{
+    const passwords = await getPasswords();
+    await exportToCSV(passwords, "Passwords")
+  }
 
   return (
     <View style={styles.container}>
@@ -73,7 +80,7 @@ export default function Tab() {
           right={() => (
             <Button
               mode={theme === "light" ? "contained" : "outlined"}
-              onPress={() => {}}
+              onPress={handleExport}
               disabled={false}
             >
               Exportar
