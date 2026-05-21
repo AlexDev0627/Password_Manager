@@ -75,7 +75,9 @@ export async function updatePasswords(updatedEntry: PasswordEntry): Promise <voi
   try{  
     //Buscamos las pass
     const existingPasswords = await getPasswords();
+    //Actualizamos la pass que coincida con el ID manteniendo las demas sin cambios
     const updatedPasswords =  existingPasswords.map((pass)=> pass.id === updatedEntry.id ? {...pass, ...updatedEntry}: pass);
+    //Formateamos el array actualizado a string para guardarlo
     const stringValue = JSON.stringify(updatedPasswords);
 
     if(Platform.OS === "web"){

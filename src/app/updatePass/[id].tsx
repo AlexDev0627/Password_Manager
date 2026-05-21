@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { getPasswords, PasswordEntry } from "@/utils/storage";
+import { getPasswords, PasswordEntry, updatePasswords } from "@/utils/storage";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as Clipboard from 'expo-clipboard';
 import { useTheme } from "@/context/ThemeContext";
@@ -17,9 +17,10 @@ import { TextInput } from "react-native-gesture-handler";
     const {id} = useLocalSearchParams();
     const router = useRouter();
     const [password, setPassword] =useState<PasswordEntry | null>(null);
+    
     /////Estados para actualizar los campos de la pass
     const [site, setSite] = useState("");
-    const [username, setUsername] = useState<PasswordEntry["username"]>("");
+    const [username, setUsername] = useState("");
     const [pass, setPass] = useState<PasswordEntry["password"]>("");
 
     
@@ -48,6 +49,28 @@ import { TextInput } from "react-native-gesture-handler";
         }
 
     },[password]);
+
+    
+
+    const handleUpdate = async () =>{
+        try{
+            const updateEntry = {
+                id: id as string,
+                site: site,
+                username: username,
+                password: pass
+            }
+            await updatePasswords(updateEntry)
+
+            if(Platform.OS === "web"){
+                alert("Contrasena actualizada correctamente");
+            }else{Alert.alert("Actualizacion exitosa")}
+        
+        }catch(error){
+            alert("Hubo un error al intentar actualizar" + error);
+            throw(error);
+        }
+    }
 
     const copyToClipboard = async (text: string, label: string) => {
             await Clipboard.setStringAsync(text);
@@ -149,25 +172,8 @@ import { TextInput } from "react-native-gesture-handler";
                 </View>
             </View>
             <View>
-                <Button>Guardar</Button>
+                <Button onPress ={handleUpdate}>Guardar</Button>
             </View>
-            {/* <View style={styles.metadataSection}>
-                <View style={styles.infoRow}>
-                    <FontAwesome name="calendar" size={12} color="#999" />
-                    <Text style={styles.metadataText}>
-                        Creado el: {
-                            !password.createdAt
-                                ? "No disponible"
-                                : isNaN(Number(password.createdAt))
-                                    ? password.createdAt
-                                    : new Date(Number(password.createdAt)).toLocaleString()
-                        }
-                    </Text>
-                </View>
-            </View> */}
-            {/* <Text style={styles.footerNote}>
-                Esta información está protegida localmente en tu dispositivo.
-            </Text> */}
         </ScrollView>
 
     );
