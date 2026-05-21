@@ -1,5 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+import { Alert } from 'react-native';
+import { get } from 'react-native/Libraries/NativeComponent/NativeComponentRegistry';
 
 const PASSWORDS_KEY = 'saved_passwords';
 
@@ -89,5 +91,27 @@ export async function updatePasswords(updatedEntry: PasswordEntry): Promise <voi
   }catch(error){
     console.error("Error updating password:", error);
     throw error;
+  }
+}
+export async function saveMultiplePasswords(newEntries: PasswordEntry[]): Promise<void> {
+  try{
+    const existingPasswords = await getPasswords();
+    const newEntriesMap = new Map(newEntries.map(pass => [pass.id, pass]));
+    const updatedPasswords = [...existingPasswords.filter((pass)=> !newEntriesMap.has(pass.id)), ...newEntries]
+    const stringValue = JSON.stringify(updatedPasswords);
+
+    if(Platform.OS === "web"){
+      alert("Contraseñas importadas correctamente")
+      localStorage.setItem(PASSWORDS_KEY, stringValue )
+    }else{
+      Alert.alert("Importación exitosa", "Contraseñas importadas correctamente")
+      SecureStore.setItemAsync(PASSWORDS_KEY, stringValue);
+    }
+  }catch(error){
+    if(Platform.OS ==="web"){
+      alert("Error al guardar")
+    }else{
+      Alert.alert("Error al intentar guardar")
+    }
   }
 }
