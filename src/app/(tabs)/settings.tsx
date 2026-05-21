@@ -2,17 +2,32 @@ import { View, StyleSheet } from 'react-native';
 import { useTheme } from '@/context/ThemeContext';
 import { Text, Button, List, Divider } from 'react-native-paper';
 import { exportToCSV} from '@/utils/exportToCsv'
-import { getPasswords } from '@/utils/storage';
+import { importFromCSV } from '@/utils/importToCsv';
+import { getPasswords, savePassword, saveMultiplePasswords, PasswordEntry } from '@/utils/storage';
+import { useRouter } from 'expo-router'; 
 
 export default function Tab() {
   const { theme, setTheme } = useTheme();
   const styles = theme === "dark" ? darkStyles : lightStyles;
-
+  
+  const router = useRouter();
+  //funcion para exportar las contraseñas a un archivo csv, obtiene las contraseñas guardadas y las pasa a la funcion exportToCSV
   const handleExport = async()=>{
     const passwords = await getPasswords();
     await exportToCSV(passwords, "Passwords")
   }
+  //funcion para importar las contraseñas desde un archivo csv, obtiene las contraseñas importadas y las guarda usando la funcion savePassword
+  const handleImport = async()=>{
 
+    const passwordImported = await importFromCSV<PasswordEntry>()
+    if(!passwordImported || passwordImported.length ===0){
+      return alert("Error al importar el archivo, asegurese de que el formato sea correcto y vuelva a intentarlo")
+    }
+    await saveMultiplePasswords(passwordImported);
+    //luego de guardar redirijimos al inicio para que se actualice la lista de contraseñas con las nuevas importadas
+    router.push("/");
+
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ajustes</Text>
@@ -62,7 +77,7 @@ export default function Tab() {
           right={() => (
             <Button
               mode={theme === "light" ? "contained" : "outlined"}
-              onPress={() => {}}
+              onPress={handleImport}
               disabled={false}
             >
               Importar
