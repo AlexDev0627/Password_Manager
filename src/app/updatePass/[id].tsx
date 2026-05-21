@@ -26,7 +26,8 @@ import { TextInput } from "react-native-gesture-handler";
     
     //Estado para ver o no la pass
     const [showPassword, setShowPassword] = useState(false)
-
+    
+    //UseEffect para cargar la pass a actualizar segun el ID que se le paso por params
     useEffect(() => {
         const fetchPassword = async () => {
             const pass = await getPasswords();
@@ -102,9 +103,6 @@ import { TextInput } from "react-native-gesture-handler";
             </TouchableOpacity>
 
             <View style={styles.header}>
-                {/* <View style={styles.iconCircle}>
-                    <FontAwesome name="lock" size={40} color="white" />
-                </View> */}
                 <Avatar.Image
                     size={55}
                     source={{ uri: getFavIcon(password.site) }}
@@ -120,8 +118,7 @@ import { TextInput } from "react-native-gesture-handler";
                     <Text style={styles.label}>Sitio</Text>
                     <View style={styles.infoRow}>
                         <FontAwesome name="user" size={18} color="#666" />
-                         <TextInput value={site} onChangeText={(text) => setSite(text)} style={styles.value} />
-                        {/* <Text style={styles.value}>{password.site}</Text> */}
+                         <TextInput value={site} onChangeText={(text) => setSite(text)} style={styles.value} placeholder="Ej: google.com" />
                     </View>
                 </View>
                 {/* Usuario */}
@@ -129,11 +126,7 @@ import { TextInput } from "react-native-gesture-handler";
                     <Text style={styles.label}>Nombre de Usuario / Correo</Text>
                     <View style={styles.infoRow}>
                         <FontAwesome name="user" size={18} color="#666" />
-                        {/* funcion para copiar usuario al portapapeles */}
-                        {/* <TouchableOpacity onPress={() => copyToClipboard(password.username || "", "Usuario")}>
-                            <Text style={styles.value}>{password.username}</Text>
-                        </TouchableOpacity> */}
-                        <TextInput value={username} onChangeText={(text)=> setUsername(text)} style={styles.value}/>
+                        <TextInput value={username} onChangeText={(text)=> setUsername(text)} style={styles.value} placeholder="Nombre de Usuario / Correo"/>
                     </View>
                 </View>
 
@@ -145,18 +138,10 @@ import { TextInput } from "react-native-gesture-handler";
                     <View style={styles.passwordRow}>
                         <View style={styles.infoRow}>
                             <FontAwesome name="key" size={18} color="#666" />
-                            {/* funcion para copiar password al portapapeles */}
-                            {/* <TouchableOpacity onPress={() => copyToClipboard(password.password || "", "Contraseña")}>*/}
-                                
-                                {/* <Text style={[styles.value, styles.passwordText]}> */}
+
                                     {/* estilos para mostrar o no la password */}
-                                    <TextInput value={showPassword ? pass : "*************"} onChangeText={(text)=> setPass(text)} style={styles.value}/>
-                                    {/* {showPassword ? password.password : "*************"} */}
-                                {/* </Text> */}
-                            {/* </TouchableOpacity> */}
-
+                                    <TextInput value={pass} onChangeText={(text)=> setPass(text)} style={styles.value} secureTextEntry={!showPassword}/>
                         </View>
-
                         {/* El botón que cambia el estado booleano */}
                         <TouchableOpacity
                             onPress={() => setShowPassword(!showPassword)}
