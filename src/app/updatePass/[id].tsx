@@ -61,7 +61,9 @@ export default function UpdatedPass() {
                 username: username,
                 password: pass
             }
-            await updatePasswords(updateEntry)
+            await updatePasswords(updateEntry);
+            router.push(`/`);
+            
 
             if (Platform.OS === "web") {
                 alert("Contrasena actualizada correctamente");
@@ -157,7 +159,9 @@ export default function UpdatedPass() {
                 </View>
             </View>
             <View>
-                <Button onPress={handleUpdate}>Guardar</Button>
+                <Button onPress={handleUpdate} style={styles.button}>
+                    <Text style={styles.buttonText}>Guardar</Text>
+                </Button>
             </View>
         </ScrollView>
 
@@ -243,8 +247,9 @@ const lightStyles = StyleSheet.create({
         color: "#333",
         fontWeight: "600",
         borderWidth: 1,
-        borderColor: "red",
-        borderRadius: 5
+        borderColor: "#285089ff",
+        borderRadius: 8,
+        padding: 10,
     },
     passwordText: {
         fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
@@ -277,6 +282,20 @@ const lightStyles = StyleSheet.create({
         color: '#999',
         fontStyle: 'italic',
     },
+    button: {
+        marginTop: 20,
+         backgroundColor: "#285089ff",
+         borderRadius: 8,
+         width: 150,
+         paddingVertical: 2,
+         paddingHorizontal: 16,
+         margin:'auto',
+     },
+     buttonText: {
+         color: "#fff",
+         fontSize: 16,
+         fontWeight: "600",
+     },
 
 });
 
@@ -358,8 +377,10 @@ const darkStyles = StyleSheet.create({
         color: "#fff", // Valores claros
         fontWeight: "600",
         borderWidth: 1,
-        borderColor: "red",
-        borderRadius: 5
+        borderColor: "#285089ff",
+        borderRadius: 8,
+        padding: 10,
+
     },
     passwordText: {
         fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
@@ -393,4 +414,18 @@ const darkStyles = StyleSheet.create({
         color: '#bbb',
         fontStyle: 'italic',
     },
+    button: {
+        marginTop: 20,
+         backgroundColor: "#285089ff",
+         borderRadius: 8,
+         width: 150,
+         paddingVertical: 2,
+         paddingHorizontal: 16,
+         margin:'auto',
+     },
+     buttonText: {
+         color: "#fff",
+         fontSize: 16,
+         fontWeight: "600",
+     },
 });
