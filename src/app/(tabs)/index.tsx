@@ -98,7 +98,11 @@ export default function Index() {
         await Clipboard.setStringAsync(text);
         alert(`${label} copiado al portapapeles`);
         closeSheet();
-    }
+    };
+
+//funcion para filtrar por búsquedas las passwords
+const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().includes(query));
+
 
     // Funciona para renderizar cada item de la lista, en este caso las passwords
     const renderItem = ({ item }: { item: PasswordEntry }) => (
