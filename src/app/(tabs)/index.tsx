@@ -43,7 +43,8 @@ export default function Index() {
     const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
     //estado para saber que elemento se selecciono del modal
     const [selectedItem, setSelectedItem] = useState<PasswordEntry | null>(null);
-
+//estado para la busqueda
+const [query, setQuery] = useState("");
     const router = useRouter()
     const loadPasswords = useCallback(async () => {
         const stored = await getPasswords();
