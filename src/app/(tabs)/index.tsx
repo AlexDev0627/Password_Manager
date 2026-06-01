@@ -11,7 +11,7 @@ import { Avatar, } from "react-native-paper";
 import React, { useMemo, useRef } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import * as Clipboard from 'expo-clipboard';
 
 
@@ -43,8 +43,10 @@ export default function Index() {
     const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
     //estado para saber que elemento se selecciono del modal
     const [selectedItem, setSelectedItem] = useState<PasswordEntry | null>(null);
-//estado para la busqueda
-const [query, setQuery] = useState("");
+    //estado para la busqueda
+    const [query, setQuery] = useState("");
+    console.log(query) 
+    
     const router = useRouter()
     const loadPasswords = useCallback(async () => {
         const stored = await getPasswords();
@@ -102,7 +104,7 @@ const [query, setQuery] = useState("");
     };
 
 //funcion para filtrar por búsquedas las passwords
-const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().includes(query));
+const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().includes(query.toLowerCase()));
 
 
     // Funciona para renderizar cada item de la lista, en este caso las passwords
@@ -132,19 +134,29 @@ const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().inc
     );
 
 
-    // Si no hay passwords guardaddas devolvemos el siguiente mensaje
+   
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <Text style={styles.header}>Gestor de contraseñas</Text>
+                <FontAwesome5 name="search" sty/>
+                <TextInput 
+                value={query}
+                onChangeText={setQuery}
+                style={{backgroundColor:"white",color:"red",maxWidth:"50%",margin:"auto",padding:10,marginBottom:30}}>
 
+                </TextInput>
+
+                {/* // Si no hay passwords guardaddas devolvemos el siguiente mensaje */}
                 {/* ////////////////////////// */}
                 {passwords.length === 0 ? (
                     <Text style={styles.emptyText}>No tienes contraseñas guardadas aún.</Text>
-                ) : (
+                ) : filteredPasswords.length === 0 ? (
+                    <Text style={styles.emptyText}>No hay coincidencias para {query}</Text>
+                ): (
 
                     <FlatList
-                        data={passwords}
+                        data={filteredPasswords}
                         keyExtractor={(item) => item.id}
                         renderItem={renderItem}
                         contentContainerStyle={styles.listContent}
