@@ -139,13 +139,20 @@ const filteredPasswords = passwords.filter((pass) => pass.site.toLowerCase().inc
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <Text style={styles.header}>Gestor de contraseñas</Text>
-                <FontAwesome5 name="search" sty/>
-                <TextInput 
+           <View style={styles.searchContainer}>
+             <FontAwesome5 
+                name="search" 
+                size={16} 
+                color={theme === "dark" ? '#bbb' : '#666'} 
+             />
+             <TextInput 
                 value={query}
                 onChangeText={setQuery}
-                style={{backgroundColor:"white",color:"red",maxWidth:"50%",margin:"auto",padding:10,marginBottom:30}}>
-
-                </TextInput>
+                placeholder="Buscar..."
+                placeholderTextColor={theme === "dark" ? '#666' : '#999'} // placeholde tambien de adapta al tema
+                style={styles.searchInput}
+            />
+        </View>
 
                 {/* // Si no hay passwords guardaddas devolvemos el siguiente mensaje */}
                 {/* ////////////////////////// */}
@@ -236,6 +243,30 @@ const lightStyles = StyleSheet.create({
         alignContent: "center",
         backgroundColor: '#f5f5f5',
         paddingTop: 50,
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white', // Fondo blanco como tus cards
+        paddingHorizontal: 16,
+        borderRadius: 16,
+        marginBottom: 30,         
+        width: 350,               
+        height: 50,               
+        alignSelf: 'center',      // Centra la barra en la pantalla
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,            
+    },
+    searchInput: {
+        flex: 1,
+        height: '100%',
+        color: '#333',            
+        fontSize: 16,
+        paddingVertical: 0,
+        marginLeft: 10,           // Separa el texto del icono
     },
     header: {
         fontSize: 24,
@@ -332,6 +363,30 @@ const darkStyles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#23242a', 
+        paddingHorizontal: 16,
+        borderRadius: 16,
+        marginBottom: 30,
+        width: 350,
+        height: 50,
+        alignSelf: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 4,
+    },
+    searchInput: {
+        flex: 1,
+        height: '100%',
+        color: '#fff',          
+        fontSize: 16,
+        paddingVertical: 0,
+        marginLeft: 10,
     },
     listContent: {
         paddingHorizontal: 20,
