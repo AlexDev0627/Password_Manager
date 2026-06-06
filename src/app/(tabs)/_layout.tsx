@@ -4,10 +4,10 @@ import { useTheme } from '@/context/ThemeContext';
 import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { TextInput } from 'react-native-gesture-handler';
-import  generatePassword  from '@/utils/passwordGenerate';
+import generatePassword from '@/utils/passwordGenerate';
 import * as Clipboard from 'expo-clipboard';
 
 
@@ -18,17 +18,18 @@ export default function TabLayout() {
   const router = useRouter();
   //random pass
   const [randomPass, setRandomPass] = useState("");
-  
+
   const generate = () => {
     setRandomPass(generatePassword(12));
     console.log(randomPass)
   }
-  
+
   ///funcion para copiar al portapaeles
   const copyToClipboard = async (text: string, label: string) => {
     await Clipboard.setStringAsync(text);
-      alert(`${label} copiado al portapapeles`)
-      }
+    alert(`${label} copiado al portapapeles`)
+    closeSheetPass();
+  }
   //configuracion del bottomsheet
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['25%', '35%'], []);
@@ -45,16 +46,16 @@ export default function TabLayout() {
   const bottomSheetPass = useRef<BottomSheet>(null);
   const snapPointsPass = useMemo(() => ['25%', '45%'], []);
 
-  const openSheetPass = useCallback(()=> {
+  const openSheetPass = useCallback(() => {
     bottomSheetPass.current?.expand();
     closeSheet();
     generate();
 
-  },[]);
-  
-  const closeSheetPass = useCallback(() =>{
+  }, []);
+
+  const closeSheetPass = useCallback(() => {
     bottomSheetPass.current?.close();
-  },[]);
+  }, []);
 
   const renderBackdrop = useCallback((props: any) => (
     <BottomSheetBackdrop
@@ -162,38 +163,43 @@ export default function TabLayout() {
         </BottomSheetView>
       </BottomSheet>
 
-    <BottomSheet
-    ref={bottomSheetPass}
-    index={-1}
-    snapPoints={snapPointsPass}
-    enablePanDownToClose={true}
-    backdropComponent={renderBackdrop}
-    backgroundStyle={styles.bottomSheetBg}
-    handleIndicatorStyle={styles.handleIndicator}
-    >
-      <BottomSheetView>
-          <View style={styles.inputContainer}>
+      <BottomSheet
+        ref={bottomSheetPass}
+        index={-1}
+        snapPoints={snapPointsPass}
+        enablePanDownToClose={true}
+        backdropComponent={renderBackdrop}
+        backgroundStyle={styles.bottomSheetBg}
+        handleIndicatorStyle={styles.handleIndicator}
+      >
+        <BottomSheetView style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Generar Contraseña</Text>
 
-          <Text style={styles.passText}>Generar Contraseña</Text>
-        
-        <TouchableOpacity style={{alignSelf:"flex-end",marginRight:20}} onPress={()=> generate()} >
-          <View style={styles.iconPass}>
-             <FontAwesome5 name="sync-alt" size={20} color={isDark? "white" : "#3c5ce9e3"} />
-           </View>
-        </TouchableOpacity>
-         
-
-         <Text style={styles.textPass}>
-            {randomPass}
-         </Text>
-
-          <Button style={styles.buttonPass} textColor='white' onPress={()=> copyToClipboard(randomPass || "", "Contraseña")}>Copiar Seleccion</Button>
-
+          <View style={styles.passwordContainer}>
+            <View style={styles.passwordCard}>
+              <Text style={styles.passwordText} numberOfLines={1} adjustsFontSizeToFit>
+                {randomPass || "Generando..."}
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.refreshButton} onPress={() => generate()}>
+              <FontAwesome5 name="sync-alt" size={18} color={isDark ? "#60a5fa" : "#3b82f6"} />
+            </TouchableOpacity>
           </View>
-      </BottomSheetView>
-    </BottomSheet>
 
-    </View>
+          <Button
+            mode="contained"
+            style={styles.copyButton}
+            contentStyle={styles.copyButtonContent}
+            labelStyle={styles.copyButtonLabel}
+            icon="content-copy"
+            onPress={() => copyToClipboard(randomPass || "", "Contraseña")}
+          >
+            Copiar Contraseña
+          </Button>
+        </BottomSheetView>
+      </BottomSheet>
+
+    </View >
   );
 }
 
@@ -255,46 +261,63 @@ const lightStyles = StyleSheet.create({
     color: '#64748b',
     marginTop: 2,
   },
-   passText:{
-    color:"black",
-    marginTop:10,
-    fontSize:18,
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    marginTop: 8,
   },
-  inputContainer:{
-    alignItems:"center",
-    justifyContent:"center",
-
+  passwordCard: {
+    flex: 1,
+    backgroundColor: '#f1f5f9',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  textPass:{
-    color:"#000000c1",
-    fontSize:22,
-     width:"50%",
-    // alignSelf:"center",
-    textAlign:"center",
-    height:50,
-    backgroundColor: '#ffffff98',
-    borderRadius:10,
-    padding:10,
-    marginTop:40,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
+  passwordText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#0f172a',
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
+    letterSpacing: 1.5,
+    textAlign: 'center',
   },
-  iconPass:{
-    backgroundColor: '#d8d8d883',
-    flexDirection:"row",
-    borderRadius:100,
-    padding:8
+  refreshButton: {
+    backgroundColor: '#ffffff',
+    padding: 14,
+    borderRadius: 16,
+    marginLeft: 12,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  buttonPass:{
-    width:"80%",
-    padding:2,
-    marginTop:100,
-    backgroundColor:"#3c5ce9e3",
-    fontSize:10,
+  copyButton: {
+    backgroundColor: '#3b82f6',
+    borderRadius: 14,
+    paddingVertical: 4,
+    shadowColor: '#3b82f6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  copyButtonContent: {
+    height: 48,
+  },
+  copyButtonLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#ffffff',
   }
-  
+
 });
 
 const darkStyles = StyleSheet.create({
@@ -355,43 +378,60 @@ const darkStyles = StyleSheet.create({
     color: '#94a3b8',
     marginTop: 2,
   },
-  passText:{
-    color:"white",
-    marginTop:10,
-    fontSize:18,
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    marginTop: 8,
   },
-  inputContainer:{
-    alignItems:"center",
-    justifyContent:"center",
-
+  passwordCard: {
+    flex: 1,
+    backgroundColor: '#1e293b',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: '#334155',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  textPass:{
-    color:"#dad8d8c1",
-    fontSize:22,
-     width:"50%",
-    // alignSelf:"center",
-    textAlign:"center",
-    height:50,
-    backgroundColor: '#0e0e0ec2',
-    borderRadius:10,
-    padding:10,
-    marginTop:40,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
+  passwordText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#f8fafc',
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
+    letterSpacing: 1.5,
+    textAlign: 'center',
   },
-  iconPass:{
-    backgroundColor: '#0e0e0ee3',
-    flexDirection:"row",
-    borderRadius:100,
-    padding:8
+  refreshButton: {
+    backgroundColor: '#0f172a',
+    padding: 14,
+    borderRadius: 16,
+    marginLeft: 12,
+    borderWidth: 1,
+    borderColor: '#334155',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  buttonPass:{
-    width:"80%",
-    padding:2,
-    marginTop:100,
-    backgroundColor:"#3c5ce9e3",
-    fontSize:10,
+  copyButton: {
+    backgroundColor: '#3b82f6',
+    borderRadius: 14,
+    paddingVertical: 4,
+    shadowColor: '#3b82f6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  copyButtonContent: {
+    height: 48,
+  },
+  copyButtonLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#ffffff',
   }
 });
