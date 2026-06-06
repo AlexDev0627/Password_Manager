@@ -2,11 +2,14 @@ import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { savePassword } from "@/utils/storage";
 import { useTheme } from "@/context/ThemeContext";
+import { useRouter } from "expo-router";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Pass() {
     const { theme } = useTheme();
     const styles = theme === "dark" ? darkStyles : lightStyles;
     const [site, setSite] = useState("");
+    const router = useRouter();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -36,7 +39,12 @@ export default function Pass() {
     };
 
     return (
-        <View style={styles.container}>
+          <View style={styles.container}>
+           <TouchableOpacity onPress={() => router.push(`/`)} style={styles.backButton}>
+                        <FontAwesome5 name="arrow-left" size={16} color={theme === "dark" ? "#ffffff" : "#333333"} />
+                        <Text style={styles.backText}> Volver a Inicio</Text>
+            </TouchableOpacity>
+      
             <Text style={styles.title}>Crear Contraseña</Text>
             <TextInput
                 style={styles.input}
@@ -74,6 +82,17 @@ const lightStyles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 24,
+    },
+      backButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 40,
+        marginBottom: 20,
+    },
+    backText: {
+        fontSize: 16,
+        color: "#333333",
+        fontWeight: "500",
     },
     title: {
         color: "#222",
@@ -116,6 +135,17 @@ const darkStyles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 24,
+    },
+     backButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 40,
+        marginBottom: 20,
+    },
+    backText: {
+        fontSize: 16,
+        color: "#ffffff",
+        fontWeight: "500",
     },
     title: {
         color: "#fff",
