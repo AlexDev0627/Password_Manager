@@ -1,6 +1,6 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Feather from '@expo/vector-icons/Feather';
 import { useTheme } from '@/context/ThemeContext';
+import { BlurView } from 'expo-blur';
 import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
@@ -68,11 +68,11 @@ export default function TabLayout() {
   ), []);
 
   const handleOptionPress = (route: string) => {
-    closeSheet();
     // Retardo sutil para que el Bottom Sheet se cierre de manera fluida antes de navegar
     setTimeout(() => {
       router.push(route as any);
-    }, 250);
+      closeSheet();
+    }, 100);
   };
 
   const styles = isDark ? darkStyles : lightStyles;
@@ -81,12 +81,34 @@ export default function TabLayout() {
     <View style={{ flex: 1 }}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: isDark ? '#2e499aff' : 'gray',
-          tabBarInactiveTintColor: isDark ? '#aaa' : '#888',
-          tabBarStyle: {
-            backgroundColor: isDark ? '#181a20' : '#f0f0f0',
-            borderTopColor: isDark ? '#333' : '#ccc',
+          tabBarActiveTintColor: '#5f78ca',
+          tabBarInactiveTintColor: isDark ? '#64748b' : '#94a3b8',
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: '600',
+            marginTop: 2,
           },
+          tabBarStyle: {
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'transparent',
+            borderTopWidth: 1,
+            borderTopColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
+            height: Platform.OS === 'ios' ? 88 : 68,
+            paddingBottom: Platform.OS === 'ios' ? 28 : 12,
+            paddingTop: 8,
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          tabBarBackground: () => (
+            <BlurView
+              tint={isDark ? 'dark' : 'light'}
+              intensity={65}
+              style={StyleSheet.absoluteFill}
+            />
+          ),
           headerShown: false,
         }}
       >
@@ -94,7 +116,9 @@ export default function TabLayout() {
           name="index"
           options={{
             title: 'Home',
-            tabBarIcon: ({ color }) => <FontAwesome size={28} name="lock" color={color} />,
+            tabBarIcon: ({ color }) => (
+              <Feather size={24} name="shield" color={color} />
+            ),
           }}
         />
 
@@ -102,7 +126,9 @@ export default function TabLayout() {
           name="passwords"
           options={{
             title: 'Crear',
-            tabBarIcon: ({ color }) => <FontAwesome size={28} name="plus" color={color} />,
+            tabBarIcon: ({ color }) => (
+              <Feather size={24} name="plus-circle" color={color} />
+            ),
           }}
           listeners={{
             tabPress: (e) => {
@@ -117,7 +143,9 @@ export default function TabLayout() {
           name="settings"
           options={{
             title: 'Configuración',
-            tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+            tabBarIcon: ({ color }) => (
+              <Feather size={24} name="settings" color={color} />
+            ),
           }}
         />
       </Tabs>
@@ -140,7 +168,7 @@ export default function TabLayout() {
             onPress={() => handleOptionPress('/passwords')}
           >
             <View style={[styles.iconContainer, { backgroundColor: isDark ? '#1e293b' : '#eef2ff' }]}>
-              <FontAwesome5 name="user-shield" size={20} color="#5f78ca" />
+              <Feather name="user" size={22} color="#5f78ca" />
             </View>
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionTitle}>Inicio de Sesión (Login)</Text>
@@ -153,7 +181,7 @@ export default function TabLayout() {
             onPress={() => openSheetPass()}
           >
             <View style={[styles.iconContainer, { backgroundColor: isDark ? '#2e251b' : '#fef3c7' }]}>
-              <FontAwesome5 name="key" size={20} color="#d97706" />
+              <Feather name="key" size={22} color="#d97706" />
             </View>
             <View style={styles.optionTextContainer}>
               <Text style={styles.optionTitle}>Nueva Contraseña</Text>
@@ -182,7 +210,7 @@ export default function TabLayout() {
               </Text>
             </View>
             <TouchableOpacity style={styles.refreshButton} onPress={() => generate()}>
-              <FontAwesome5 name="sync-alt" size={18} color={isDark ? "#60a5fa" : "#3b82f6"} />
+              <Feather name="refresh-cw" size={18} color={isDark ? "#60a5fa" : "#3b82f6"} />
             </TouchableOpacity>
           </View>
 
