@@ -5,6 +5,7 @@ import React, { useRef, useMemo, useCallback } from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { TextInput } from 'react-native-gesture-handler';
 
 export default function TabLayout() {
   const { theme } = useTheme();
@@ -12,6 +13,8 @@ export default function TabLayout() {
   const router = useRouter();
 
   //configuracion del bottomsheet
+
+
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['25%', '35%'], []);
 
@@ -22,6 +25,19 @@ export default function TabLayout() {
   const closeSheet = useCallback(() => {
     bottomSheetRef.current?.close();
   }, []);
+
+  //BotttomSheet para generar una password
+  const bottomSheetPass = useRef<BottomSheet>(null);
+  const snapPointsPass = useMemo(() => ['25%', '45%'], []);
+
+  const openSheetPass = useCallback(()=> {
+    bottomSheetPass.current?.expand();
+    closeSheet();
+  },[]);
+  
+  const closeSheetPass = useCallback(() =>{
+    bottomSheetPass.current?.close();
+  },[]);
 
   const renderBackdrop = useCallback((props: any) => (
     <BottomSheetBackdrop
@@ -116,7 +132,7 @@ export default function TabLayout() {
 
           <TouchableOpacity
             style={styles.modalOption}
-            onPress={() => handleOptionPress('')}
+            onPress={() => openSheetPass()}
           >
             <View style={[styles.iconContainer, { backgroundColor: isDark ? '#2e251b' : '#fef3c7' }]}>
               <FontAwesome5 name="key" size={20} color="#d97706" />
@@ -128,6 +144,21 @@ export default function TabLayout() {
           </TouchableOpacity>
         </BottomSheetView>
       </BottomSheet>
+
+    <BottomSheet
+    ref={bottomSheetPass}
+    index={-1}
+    snapPoints={snapPointsPass}
+    enablePanDownToClose={true}
+    backdropComponent={renderBackdrop}
+    backgroundStyle={styles.bottomSheetBg}
+    handleIndicatorStyle={styles.handleIndicator}
+    >
+      <BottomSheetView>
+          <Text style={{color:"white", alignSelf:"center", fontSize:20}}>Generar Password</Text>
+          
+      </BottomSheetView>
+    </BottomSheet>
     </View>
   );
 }
