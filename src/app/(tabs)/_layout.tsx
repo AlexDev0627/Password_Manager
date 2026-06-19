@@ -1,20 +1,35 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useTheme } from '@/context/ThemeContext';
-import React, { useRef, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { Tabs, useRouter } from 'expo-router';
+import { Button } from 'react-native-paper';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { TextInput } from 'react-native-gesture-handler';
+import  generatePassword  from '@/utils/passwordGenerate';
+import * as Clipboard from 'expo-clipboard';
+
+
 
 export default function TabLayout() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const router = useRouter();
-
+  //random pass
+  const [randomPass, setRandomPass] = useState("");
+  
+  const generate = () => {
+    setRandomPass(generatePassword(12));
+    console.log(randomPass)
+  }
+  
+  ///funcion para copiar al portapaeles
+  const copyToClipboard = async (text: string, label: string) => {
+    await Clipboard.setStringAsync(text);
+      alert(`${label} copiado al portapapeles`)
+      }
   //configuracion del bottomsheet
-
-
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['25%', '35%'], []);
 
@@ -33,6 +48,8 @@ export default function TabLayout() {
   const openSheetPass = useCallback(()=> {
     bottomSheetPass.current?.expand();
     closeSheet();
+    generate();
+
   },[]);
   
   const closeSheetPass = useCallback(() =>{
@@ -155,10 +172,27 @@ export default function TabLayout() {
     handleIndicatorStyle={styles.handleIndicator}
     >
       <BottomSheetView>
-          <Text style={{color:"white", alignSelf:"center", fontSize:20}}>Generar Password</Text>
-          
+          <View style={styles.inputContainer}>
+
+          <Text style={styles.passText}>Generar Contraseña</Text>
+        
+        <TouchableOpacity style={{alignSelf:"flex-end",marginRight:20}} onPress={()=> generate()} >
+          <View style={styles.iconPass}>
+             <FontAwesome5 name="sync-alt" size={20} color={isDark? "white" : "#3c5ce9e3"} />
+           </View>
+        </TouchableOpacity>
+         
+
+         <Text style={styles.textPass}>
+            {randomPass}
+         </Text>
+
+          <Button style={styles.buttonPass} textColor='white' onPress={()=> copyToClipboard(randomPass || "", "Contraseña")}>Copiar Seleccion</Button>
+
+          </View>
       </BottomSheetView>
     </BottomSheet>
+
     </View>
   );
 }
@@ -221,6 +255,46 @@ const lightStyles = StyleSheet.create({
     color: '#64748b',
     marginTop: 2,
   },
+   passText:{
+    color:"black",
+    marginTop:10,
+    fontSize:18,
+  },
+  inputContainer:{
+    alignItems:"center",
+    justifyContent:"center",
+
+  },
+  textPass:{
+    color:"#000000c1",
+    fontSize:22,
+     width:"50%",
+    // alignSelf:"center",
+    textAlign:"center",
+    height:50,
+    backgroundColor: '#ffffff98',
+    borderRadius:10,
+    padding:10,
+    marginTop:40,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+  },
+  iconPass:{
+    backgroundColor: '#d8d8d883',
+    flexDirection:"row",
+    borderRadius:100,
+    padding:8
+  },
+  buttonPass:{
+    width:"80%",
+    padding:2,
+    marginTop:100,
+    backgroundColor:"#3c5ce9e3",
+    fontSize:10,
+  }
+  
 });
 
 const darkStyles = StyleSheet.create({
@@ -281,4 +355,43 @@ const darkStyles = StyleSheet.create({
     color: '#94a3b8',
     marginTop: 2,
   },
+  passText:{
+    color:"white",
+    marginTop:10,
+    fontSize:18,
+  },
+  inputContainer:{
+    alignItems:"center",
+    justifyContent:"center",
+
+  },
+  textPass:{
+    color:"#dad8d8c1",
+    fontSize:22,
+     width:"50%",
+    // alignSelf:"center",
+    textAlign:"center",
+    height:50,
+    backgroundColor: '#0e0e0ec2',
+    borderRadius:10,
+    padding:10,
+    marginTop:40,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+  },
+  iconPass:{
+    backgroundColor: '#0e0e0ee3',
+    flexDirection:"row",
+    borderRadius:100,
+    padding:8
+  },
+  buttonPass:{
+    width:"80%",
+    padding:2,
+    marginTop:100,
+    backgroundColor:"#3c5ce9e3",
+    fontSize:10,
+  }
 });
