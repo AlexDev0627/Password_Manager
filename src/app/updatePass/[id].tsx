@@ -6,6 +6,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import * as Clipboard from 'expo-clipboard';
 import { useTheme } from "@/context/ThemeContext";
 import { Avatar } from "react-native-paper";
+import generatePassword from "@/utils/passwordGenerate"
 
 export default function UpdatedPass() {
     const { theme } = useTheme();
@@ -91,22 +92,14 @@ export default function UpdatedPass() {
             Alert.alert("Copiado", `${label} copiado correctamente.`);
         }
     };
-
-    // Función para generar una contraseña segura y aleatoria
-    const generateStrongPassword = () => {
-        let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*'=?*-<>]";
-        let password = "";
-        for (let i = 0; i < 16; i++) {
-            password += chars.charAt(Math.floor(Math.random() * chars.length))
-        }
-        setPass(password)
-        if (Platform.OS === "web") {
-            alert("Nueva contrasena segura generada");
-        } else {
-            Alert.alert("Contrasena segura generada");
-        }
-    }
-
+    //funcion para generar una contrasena segura
+    const handleGeneratePass = () =>{
+        setPass(generatePassword(16))
+        if(Platform.OS === "web")return alert("Contrasena generada con exito");
+            else return Alert.alert("Contrasena generada correctamente")
+    };
+    
+    
     const getFavIcon = (domain: string) => {
         const cleanedDomain = domain?.trim().toLowerCase() || "";
         return `https://www.google.com/s2/favicons?sz=128&domain=${cleanedDomain}.com`;
@@ -254,7 +247,7 @@ export default function UpdatedPass() {
                     </View>
 
                     {/* Generar Contraseña */}
-                    <TouchableOpacity onPress={generateStrongPassword} style={styles.magicGenButton}>
+                    <TouchableOpacity onPress={()=> handleGeneratePass()} style={styles.magicGenButton}>
                         <FontAwesome5 name="magic" size={12} color="#5f78ca" />
                         <Text style={styles.magicGenButtonText}> Generar contraseña segura</Text>
                     </TouchableOpacity>
