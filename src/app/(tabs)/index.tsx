@@ -316,7 +316,8 @@ const lightStyles = StyleSheet.create({
     },
     listContent: {
         paddingHorizontal: 20,
-        alignItems: "center"
+        alignItems: "center",
+        paddingBottom: 100,
     },
     card: {
         flex: 1,
@@ -486,7 +487,9 @@ const darkStyles = StyleSheet.create({
     },
     listContent: {
         paddingHorizontal: 20,
-        alignItems: "center"
+        alignItems: "center",
+        paddingBottom: 100,
+
     },
     card: {
         alignContent: "center",
