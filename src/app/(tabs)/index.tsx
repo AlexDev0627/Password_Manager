@@ -9,8 +9,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useTheme } from "@/context/ThemeContext";
 import { Avatar, } from "react-native-paper";
 import React, { useMemo, useRef } from 'react';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import * as Clipboard from 'expo-clipboard';
 
@@ -18,13 +17,13 @@ import * as Clipboard from 'expo-clipboard';
 
 export default function Index() {
     //funcion para abrir un modalBottomSheet
-    const bottomSheetRef = useRef<BottomSheet>(null);
+    const bottomSheetRef = useRef<BottomSheetModal>(null);
     //con useMemo definicmos los puntos de altura
-    const snapPoints = useMemo(() => ['25%', '55%'], []);
+    const snapPoints = useMemo(() => ['25%', '70%'], []);
     // funcion para abrir el modal
-    const openSheet = () => { bottomSheetRef.current?.expand(); }
+    const openSheet = () => { bottomSheetRef.current?.present(); }
     // funcion para cerrar el modal
-    const closeSheet = () => { bottomSheetRef.current?.close() }
+    const closeSheet = () => { bottomSheetRef.current?.dismiss() }
     // funcion para renderizar el fondo del modal
     const renderBackdrop = useCallback((props: any) => (
         <BottomSheetBackdrop {...props}
@@ -184,9 +183,9 @@ export default function Index() {
 
                 {/* modalBottomSheet */}
                 {/* <Button title="Configuraciones" onPress={openSheet} /> */}
-                <BottomSheet
+                <BottomSheetModal
                     ref={bottomSheetRef}
-                    index={-1} // -1 significa que inicia OCULTO
+                    index={1} // en BottomSheetModal el index define qué snapPoint inicial usar
                     snapPoints={snapPoints}
                     enablePanDownToClose={true} // Permite cerrar al deslizar abajo
                     backdropComponent={renderBackdrop} // Fondo personalizado
@@ -258,7 +257,7 @@ export default function Index() {
                             </View>
                         </GHTouchableOpacity>
                     </BottomSheetView>
-                </BottomSheet>
+                </BottomSheetModal>
             </View>
         </GestureHandlerRootView >
     );
@@ -377,6 +376,7 @@ const lightStyles = StyleSheet.create({
         paddingHorizontal: 24,
         paddingTop: 10,
         paddingBottom: 24,
+        height: 520,
         alignItems: 'stretch',
         width: '100%',
     },
@@ -548,6 +548,7 @@ const darkStyles = StyleSheet.create({
         paddingHorizontal: 24,
         paddingTop: 10,
         paddingBottom: 24,
+        height: 520,
         alignItems: 'stretch',
         width: '100%',
     },
