@@ -239,8 +239,50 @@ export default function TabLayout() {
         snapPoints={snapPointsPass}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
-        backgroundStyle={styles.bottomSheetBg}
-        handleIndicatorStyle={styles.handleIndicator}
+        backgroundStyle={{ backgroundColor: "transparent" }}
+        backgroundComponent={() => (
+          <View
+            style={[StyleSheet.absoluteFill,
+            {
+              overflow: "hidden",
+              borderTopLeftRadius: 32,
+              borderTopRightRadius: 32,
+              borderWidth: 1.5,
+              borderBottomWidth: 0,
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.27)',
+
+            }
+            ]}
+          >
+            <BlurView
+              tint={isDark ? "dark" : "light"}
+              intensity={20}
+              style={StyleSheet.absoluteFill}
+            >
+            </BlurView>
+
+            <View
+              style={[StyleSheet.absoluteFill,
+              {
+                overflow: "hidden",
+                backgroundColor: isDark ? 'rgba(28, 31, 38, 0.65)' : 'rgba(248, 250, 252, 0.75)'
+              }
+              ]}
+            />
+
+
+          </View>
+        )}
+        handleIndicatorStyle={[
+          styles.handleIndicator,
+          {
+            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.15)',
+            width: 48,
+            height: 5,
+            borderRadius: 3,
+            marginTop: 8
+          }
+        ]}
       >
         <BottomSheetView style={styles.modalContent}>
           <Text style={styles.modalTitle}>Generar Contraseña</Text>
@@ -285,7 +327,7 @@ const lightStyles = StyleSheet.create({
     elevation: 10,
   },
   handleIndicator: {
-    backgroundColor: '#cbd5e1',
+    // backgroundColor: '#cbd5e1',
     width: 40,
     height: 4,
   },
@@ -402,7 +444,7 @@ const darkStyles = StyleSheet.create({
     elevation: 10,
   },
   handleIndicator: {
-    backgroundColor: '#475569',
+    // backgroundColor: '#475569',
     width: 40,
     height: 4,
   },
