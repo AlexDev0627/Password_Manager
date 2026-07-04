@@ -5,7 +5,7 @@ import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { TextInput } from 'react-native-gesture-handler';
 import generatePassword from '@/utils/passwordGenerate';
 import * as Clipboard from 'expo-clipboard';
@@ -31,30 +31,30 @@ export default function TabLayout() {
     closeSheetPass();
   }
   //configuracion del bottomsheet
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['25%', '35%'], []);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['50%', '49%'], []);
 
   const openSheet = useCallback(() => {
-    bottomSheetRef.current?.expand();
+    bottomSheetRef.current?.present();
   }, []);
 
   const closeSheet = useCallback(() => {
-    bottomSheetRef.current?.close();
+    bottomSheetRef.current?.dismiss();
   }, []);
 
   //BotttomSheet para generar una password
-  const bottomSheetPass = useRef<BottomSheet>(null);
-  const snapPointsPass = useMemo(() => ['25%', '45%'], []);
+  const bottomSheetPass = useRef<BottomSheetModal>(null);
+  const snapPointsPass = useMemo(() => ['50%', '50%'], []);
 
   const openSheetPass = useCallback(() => {
-    bottomSheetPass.current?.expand();
+    bottomSheetPass.current?.present();
     closeSheet();
     generate();
 
   }, []);
 
   const closeSheetPass = useCallback(() => {
-    bottomSheetPass.current?.close();
+    bottomSheetPass.current?.dismiss();
   }, []);
 
   const renderBackdrop = useCallback((props: any) => (
@@ -151,9 +151,9 @@ export default function TabLayout() {
       </Tabs>
 
       {/* modal bottomSheet */}
-      <BottomSheet
+      <BottomSheetModal
         ref={bottomSheetRef}
-        index={-1}
+        index={0}
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
@@ -189,11 +189,11 @@ export default function TabLayout() {
             </View>
           </TouchableOpacity>
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheetModal>
 
-      <BottomSheet
+      <BottomSheetModal
         ref={bottomSheetPass}
-        index={-1}
+        index={0}
         snapPoints={snapPointsPass}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
@@ -225,7 +225,7 @@ export default function TabLayout() {
             Copiar Contraseña
           </Button>
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheetModal>
 
     </View >
   );
