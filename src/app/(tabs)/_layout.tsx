@@ -31,7 +31,7 @@ export default function TabLayout() {
     closeSheetPass();
   }
   //configuracion del bottomsheet
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const bottomSheetRef = useRef<BottomSheetModal | null>(null);
   const snapPoints = useMemo(() => ['50%', '49%'], []);
 
   const openSheet = useCallback(() => {
@@ -157,9 +157,50 @@ export default function TabLayout() {
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         backdropComponent={renderBackdrop}
-        backgroundStyle={styles.bottomSheetBg}
-        handleIndicatorStyle={styles.handleIndicator}
+        backgroundStyle={{ backgroundColor: 'transparent' }}
+        backgroundComponent={() => (
+
+          <View
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                overflow: "hidden",
+                borderTopLeftRadius: 32,
+                borderTopRightRadius: 32,
+                borderWidth: 1.5,
+                borderBottomWidth: 0,
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.27)',
+              }
+            ]}
+          >
+            <BlurView
+              intensity={20}
+              tint={isDark ? "dark" : "light"}
+              style={StyleSheet.absoluteFill}
+            />
+            {/* Capa de color para dar el tono deseado sobre el blur */}
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                {
+                  backgroundColor: isDark ? 'rgba(28, 31, 38, 0.65)' : 'rgba(248, 250, 252, 0.75)'
+                }
+              ]}
+            />
+          </View>
+        )}
+        handleIndicatorStyle={[
+          styles.handleIndicator,
+          {
+            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.15)',
+            width: 48,
+            height: 5,
+            borderRadius: 3,
+            marginTop: 8
+          }
+        ]}
       >
+
         <BottomSheetView style={styles.modalContent}>
           <Text style={styles.modalTitle}>¿Qué deseas crear?</Text>
 
@@ -191,6 +232,7 @@ export default function TabLayout() {
         </BottomSheetView>
       </BottomSheetModal>
 
+      {/* Modal para generar una pass */}
       <BottomSheetModal
         ref={bottomSheetPass}
         index={0}
