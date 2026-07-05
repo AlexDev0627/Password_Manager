@@ -12,6 +12,7 @@ import React, { useMemo, useRef } from 'react';
 import { BottomSheetModal, BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 import * as Clipboard from 'expo-clipboard';
+import { BlurView } from "expo-blur";
 
 
 
@@ -38,7 +39,8 @@ export default function Index() {
 
     //Funcion para definir tema
     const { theme } = useTheme();
-    const styles = theme === "dark" ? darkStyles : lightStyles;
+    const isDark = theme === "dark";
+    const styles = isDark ? darkStyles : lightStyles
     const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
     //estado para saber que elemento se selecciono del modal
     const [selectedItem, setSelectedItem] = useState<PasswordEntry | null>(null);
@@ -189,7 +191,40 @@ export default function Index() {
                     snapPoints={snapPoints}
                     enablePanDownToClose={true} // Permite cerrar al deslizar abajo
                     backdropComponent={renderBackdrop} // Fondo personalizado
-                    backgroundStyle={styles.bottomSheetBg}
+                    backgroundStyle={{ backgroundColor: "transparent" }}
+                    backgroundComponent={() => (
+                        <View
+                            style={[StyleSheet.absoluteFill,
+                            {
+                                overflow: "hidden",
+                                borderTopLeftRadius: 32,
+                                borderTopRightRadius: 32,
+                                borderWidth: 1.5,
+                                borderBottomWidth: 0,
+                                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.27)',
+                            }
+                            ]}
+                        >
+
+                            <BlurView
+                                intensity={30}
+                                tint={isDark ? "dark" : "light"}
+                                style={StyleSheet.absoluteFill}
+                            >
+
+                            </BlurView>
+
+                            {/* Capa de color para dar el tono deseado sobre el blur */}
+                            <View
+                                style={[
+                                    StyleSheet.absoluteFill,
+                                    {
+                                        backgroundColor: isDark ? 'rgba(28, 31, 38, 0.65)' : 'rgba(248, 250, 252, 0.74)'
+                                    }
+                                ]}
+                            />
+                        </View>
+                    )}
                     handleIndicatorStyle={styles.handleIndicator}
                 >
                     <BottomSheetView style={styles.modalContent}>
