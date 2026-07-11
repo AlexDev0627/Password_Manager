@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import { get } from 'react-native/Libraries/NativeComponent/NativeComponentRegistry';
 
 const PASSWORDS_KEY = 'saved_passwords';
-
+// cambiar la interfaz, para adaptarla a plantillas estandar
 export interface PasswordEntry {
   id: string;
   site: string;
