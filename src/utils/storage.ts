@@ -6,7 +6,7 @@ import { get } from 'react-native/Libraries/NativeComponent/NativeComponentRegis
 const PASSWORDS_KEY = 'saved_passwords';
 
 export interface PasswordEntry {
-  // necesito modificar esta interfaz,cambiarla por una mas universal para hacerla mas estandar
+  // necesito modificar esta interfaz,cambiarla por una mas universal para hacerla mas estandar....
 
   id: string;
   site: string;
